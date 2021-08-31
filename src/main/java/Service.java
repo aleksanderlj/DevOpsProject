@@ -9,7 +9,7 @@ import java.sql.Statement;
 
 @Path("test")
 public class Service {
-    String strang = "Hello.. is it me youre looking for? I can see it in your eyes-";
+    String strang = "Halløj.. er det mig du kigger efter? Ich kann es in deinen Augen sehen-";
 
     @GET
     public String getTest(){
