@@ -10,9 +10,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.release>8</maven.compiler.release>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <tomcat.version>9.0.31</tomcat.version>
     </properties>
 
@@ -72,67 +71,53 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.1</version>
-                <configuration>
-                    <transformers>
-                        <!--Makes a manifest file - necessary for launch -->
-                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                            <mainClass>Main</mainClass>
-                        </transformer>
-                        <!-- includes Services in jar-->
-                        <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-
-                    </transformers>
-                    <finalName>Heroku01</finalName>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
             </plugin>
-
             <!-- yarn build -->
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.6.0</version>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>1.12.0</version>
+
+                <configuration>
+                    <nodeVersion>v14.17.6</nodeVersion>
+                    <yarnVersion>v1.22.10</yarnVersion>
+                    <workingDirectory>${basedir}/web</workingDirectory>
+                    <installDirectory>${basedir}/web</installDirectory>
+                </configuration>
+
                 <executions>
                     <execution>
-                        <id>exec1</id>
-                        <phase>validate</phase>
+                        <id>install-frontend-tools</id>
                         <goals>
-                            <goal>exec</goal>
+                            <goal>install-node-and-yarn</goal>
+                        </goals>
+                    </execution>
+
+                    <execution>
+                        <id>yarn-install</id>
+                        <goals>
+                            <goal>yarn</goal>
                         </goals>
                         <configuration>
-                            <workingDirectory>web</workingDirectory>
-                            <executable>yarn</executable>
-                            <arguments>
-                                <argument>install</argument>
-                            </arguments>
+                            <arguments>install</arguments>
                         </configuration>
                     </execution>
+
                     <execution>
-                        <id>exec2</id>
-                        <phase>validate</phase>
+                        <id>build-frontend</id>
                         <goals>
-                            <goal>exec</goal>
+                            <goal>yarn</goal>
                         </goals>
+                        <phase>prepare-package</phase>
                         <configuration>
-                            <workingDirectory>web</workingDirectory>
-                            <executable>yarn</executable>
-                            <arguments>
-                                <argument>build</argument>
-                            </arguments>
+                            <arguments>build</arguments>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
-            <!-- Copy Yarn build to java webapp folder -->
+            <!-- Copy into Tomcat folder -->
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>2.6</version>
@@ -163,6 +148,34 @@
                     </nonFilteredFileExtensions>
                 </configuration>
             </plugin>
+            <!-- Compile with dependencies -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.1</version>
+                <configuration>
+                    <transformers>
+                        <!--Makes a manifest file - necessary for launch -->
+                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                            <mainClass>Main</mainClass>
+                        </transformer>
+                        <!-- includes Services in jar-->
+                        <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+
+                    </transformers>
+                    <finalName>Heroku01</finalName>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
         </plugins>
     </build>
 
