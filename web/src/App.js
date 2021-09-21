@@ -75,6 +75,14 @@ const StoreStuff = observer(() => {
             )}
         </ul>
         <Button onClick={()=>{jonaStore.brothers.push("Jonas"); console.log(jonaStore.brothers)}}>Add the next</Button>
+        <Button disabled={jonaStore.status === "LOADING"}
+                style={{backgroundColor: jonaStore.status === "FAILED" ? "red" : jonaStore.status === "LOADING" ? "yellow" : null}}
+                onClick={() => {
+                    jonaStore.fetchNames();
+                    console.log(jonaStore.brothers)
+                }}>{jonaStore.status === "FAILED" ? "FAILED" : jonaStore.status === "LOADING" ? "LOADING" : "CLICK TO CHANGE"}</Button>
+        <Button onClick={() => {jonaStore.addName("Fesk")}}
+        >Add name</Button>
     </>
 });
 

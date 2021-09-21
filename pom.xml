@@ -65,6 +65,12 @@
             <artifactId>activation</artifactId>
             <version>1.1</version>
         </dependency>
+        <!-- Json mapper -->
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-jackson</artifactId>
+            <version>2.27</version>
+        </dependency>
     </dependencies>
 
     <build>
