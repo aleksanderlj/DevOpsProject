@@ -1,13 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
 import DemoComponent from "./DemoComponent";
-import {Button, TextField, Grid} from "@material-ui/core";
-import {
-    Switch,
-    Route,
-    Link,
-    withRouter
-} from "react-router-dom";
+import {Button} from "@material-ui/core";
+import {Link, Route, Switch, withRouter} from "react-router-dom";
 import JonaStore from "./stores/JonaStore";
 import {observer} from "mobx-react-lite";
 
