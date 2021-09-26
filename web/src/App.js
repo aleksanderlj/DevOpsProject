@@ -1,16 +1,21 @@
 import logo from './logo.svg';
 import './App.css';
 import DemoComponent from "./DemoComponent";
-import {Button} from "@material-ui/core";
 import {Link, Route, Switch, withRouter} from "react-router-dom";
 import JonaStore from "./stores/JonaStore";
 import {observer} from "mobx-react-lite";
+import {Button} from "@mui/material";
+import Header from "./Header";
+import PostContainer from "./PostContainer";
 
 const jonaStore = new JonaStore();
 
 function App() {
     return (
-            <div className="App">
+        <>
+        <Header/>
+            <div className="App"  style={{marginTop: "6em"}}>
+                <PostContainer/>
                 <nav>
                     <ul>
                         <li>
@@ -24,7 +29,6 @@ function App() {
                         </li>
                     </ul>
                 </nav>
-
                 <Switch>
                     <Route path={"/democomponent"} component={DemoComponent} />
                     <Route path={"/storestuff"} component={StoreStuff} />
@@ -33,11 +37,12 @@ function App() {
                     <Route render={() => <h1>404</h1>}/>
                 </Switch>
             </div>
+        </>
     );
 }
 
 const Home = () => {
-    return <header className="App-header">
+    return <header className="App-header" style={{position: "sticky"}}>
         <img src={logo} className="App-logo" alt="logo" />
         <p>
             Edit <code>src/App.js</code> and save to reload.

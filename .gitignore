@@ -2,3 +2,7 @@
 /target/
 .idea
 web/node_modules
+web/node
+web/yarn.lock
+web/yarn-error.log
+*.iml
