@@ -5,11 +5,9 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import MuiAppBar from "@mui/material/AppBar";
 import Typography from "@mui/material/Typography";
-import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useHistory } from "react-router-dom";
 import Drawer from "@mui/material/Drawer";
@@ -20,9 +18,11 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import { useTheme } from "@emotion/react";
+import { makeStyles } from "@mui/styles";
+import { Accessible, Adjust } from "@mui/icons-material";
+
+const useStyles = makeStyles({});
 
 const drawerWidth = 240;
 
@@ -54,6 +54,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 
 export default function AppBar() {
   const history = useHistory();
+  const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -138,18 +139,18 @@ export default function AppBar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
+      {/*<MenuItem>
         <IconButton
           size="large"
           aria-label="show 17 new notifications"
           color="inherit"
         >
-          <Badge badgeContent={17} color="error">
+          <Badge badgeContent={2} color="error">
             <NotificationsIcon />
           </Badge>
         </IconButton>
         <p>Notifications</p>
-      </MenuItem>
+      </MenuItem>*/}
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"
@@ -187,7 +188,6 @@ export default function AppBar() {
             align={"left"}
             component="div"
             sx={{ display: { xs: "none", sm: "block" } }}
-            style={{ marginRight: "-5em" }}
           >
             SHITPOSTING
           </Typography>
@@ -198,20 +198,21 @@ export default function AppBar() {
               component="div"
               onClick={() => history.replace("/")}
               sx={{ display: { xs: "block", sm: "block" } }}
+              style={{ marginLeft: "-10em" }}
             >
-              ALL POSTS
+              s ALL POSTS
             </Typography>
           </Box>
           <Box sx={{ display: { xs: "flex", md: "flex" } }}>
-            <IconButton
+            {/* <IconButton
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
             >
-              <Badge badgeContent={17} color="error">
+              <Badge badgeContent={2} color="error">
                 <NotificationsIcon />
               </Badge>
-            </IconButton>
+            </IconButton>*/}
             <IconButton
               size="large"
               edge="end"
@@ -233,14 +234,16 @@ export default function AppBar() {
           "& .MuiDrawer-paper": {
             width: drawerWidth,
             boxSizing: "border-box",
+            backgroundColor: theme.palette.secondary.main,
+            color: "white",
           },
         }}
-        variant="persistent"
+        variant={"temporary"}
         anchor="left"
         open={open}
       >
         <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
+          <IconButton color={"inherit"} onClick={handleDrawerClose}>
             {theme.direction === "ltr" ? (
               <ChevronLeftIcon />
             ) : (
@@ -250,10 +253,20 @@ export default function AppBar() {
         </DrawerHeader>
         <Divider />
         <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
+          {[
+            "All",
+            "IAmTheAsshole",
+            "the_donald",
+            "jontron",
+            "PepeLovers",
+            "IdiotsInWheelchairs",
+            "CommunistUtopia",
+            "Angular",
+            "CompilerTechnology",
+          ].map((text, index) => (
             <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              <ListItemIcon style={{ color: "white" }}>
+                {text === "IdiotsInWheelchairs" ? <Accessible /> : <Adjust />}
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
