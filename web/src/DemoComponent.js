@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, TextField, Grid} from "@material-ui/core";
+import {Button, Grid, TextField} from "@mui/material";
 
 const DemoComponent = () => {
 

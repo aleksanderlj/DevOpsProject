@@ -1,70 +1,60 @@
-import logo from './logo.svg';
-import './App.css';
-import DemoComponent from "./DemoComponent";
-import {Button, TextField, Grid} from "@material-ui/core";
-import {
-    Switch,
-    Route,
-    Link,
-    withRouter
-} from "react-router-dom";
+import "./App.css";
+import { Route, Switch, withRouter } from "react-router-dom";
 import JonaStore from "./stores/JonaStore";
-import {observer} from "mobx-react-lite";
+import { observer } from "mobx-react-lite";
+import { Button } from "@mui/material";
+import AppBar from "./AppBar";
+import PostContainer from "./postUI/PostContainer";
+import MyProfile from "./profileUI/MyProfile";
+import PostPage from "./postUI/PostPage";
 
 const jonaStore = new JonaStore();
 
 function App() {
-    return (
-            <div className="App">
-                <nav>
-                    <ul>
-                        <li>
-                            <Link to="/">Home</Link>
-                        </li>
-                        <li>
-                            <Link to="/democomponent">Demo component</Link>
-                        </li>
-                        <li>
-                            <Link to="/storestuff">Store stuff</Link>
-                        </li>
-                    </ul>
-                </nav>
-
-                <Switch>
-                    <Route path={"/democomponent"} component={DemoComponent} />
-                    <Route path={"/storestuff"} component={StoreStuff} />
-                    <Route path={"/param/:text"} component={Param}/>
-                    <Route exact path={"/"} component={Home}/>
-                    <Route render={() => <h1>404</h1>}/>
-                </Switch>
-            </div>
-    );
+  return (
+    <>
+      <AppBar />
+      <div
+        className="App"
+        style={{
+          marginTop: "7em",
+          paddingBottom: "4em",
+        }}
+      >
+        {/*<nav>*/}
+        {/*    <ul>*/}
+        {/*        <li>*/}
+        {/*            <Link to="/">Home</Link>*/}
+        {/*        </li>*/}
+        {/*        <li>*/}
+        {/*            <Link to="/democomponent">Demo component</Link>*/}
+        {/*        </li>*/}
+        {/*        <li>*/}
+        {/*            <Link to="/storestuff">Store stuff</Link>*/}
+        {/*        </li>*/}
+        {/*    </ul>*/}
+        {/*</nav>*/}
+        <Switch>
+          <Route path={"/profile"} component={MyProfile} />
+          <Route path={"/storestuff"} component={StoreStuff} />
+          <Route path={"/param/:text"} component={Param} />
+          <Route path={"/post/:post"} component={PostPage} />
+          <Route exact path={"/"} component={PostContainer} />
+          <Route render={() => <h1>404</h1>} />
+        </Switch>
+      </div>
+    </>
+  );
 }
 
-const Home = () => {
-    return <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-            Edit <code>src/App.js</code> and save to reload.
-        </p>
-
-        <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-        >
-            Learn React
-        </a>
-    </header>
-};
-
-const Param = withRouter(({history, match}) => {
-    console.log(match);
-    return <>
-        <h1>Hello {match.params.text}</h1>
-        <Button onClick={()=>history.push("/")}>Go to front</Button>
+const Param = withRouter(({ history, match }) => {
+  console.log(match);
+  return (
+    <>
+      <h1>Hello {match.params.text}</h1>
+      <Button onClick={() => history.push("/")}>Go to front</Button>
     </>
+  );
 });
 
 const StoreStuff = observer(() => {
