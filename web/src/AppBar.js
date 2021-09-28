@@ -200,7 +200,7 @@ export default function AppBar() {
               sx={{ display: { xs: "block", sm: "block" } }}
               style={{ marginLeft: "-10em" }}
             >
-              s ALL POSTS
+              ALL POSTS
             </Typography>
           </Box>
           <Box sx={{ display: { xs: "flex", md: "flex" } }}>
