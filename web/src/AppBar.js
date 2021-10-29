@@ -86,6 +86,12 @@ export default function AppBar() {
     handleMobileMenuClose();
   };
 
+  const onSignInClick = () => {
+    history.push("/signin")
+    setAnchorEl(null);
+    handleMobileMenuClose();
+  };
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -119,6 +125,7 @@ export default function AppBar() {
         Profile
       </MenuItem>
       <MenuItem onClick={handleMenuClose}>Log Out</MenuItem>
+      <MenuItem onClick={onSignInClick}>Sign In</MenuItem>
     </Menu>
   );
 
