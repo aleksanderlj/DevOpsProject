@@ -1,12 +1,12 @@
 FROM node:alpine
 
-COPY ["web/package.json", "web/yarn.lock", "web/"]
+COPY ["web/package.json", "web/package-lock.json", "web/"]
 
 WORKDIR /web
 
 ENV PATH /web/node_modules/.bin:$PATH
 
-RUN yarn install
+RUN npm install
 
 COPY ./web .
 
