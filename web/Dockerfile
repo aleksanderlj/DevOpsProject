@@ -1,6 +1,6 @@
 FROM node:alpine
 
-COPY ["web/package.json", "web/package-lock.json", "web/"]
+COPY ["web/package.json", "web/yarn.lock", "web/"]
 
 WORKDIR /web
 
