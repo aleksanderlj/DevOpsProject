@@ -6,8 +6,8 @@ COPY . .
 
 ENV PATH /node_modules/.bin:$PATH
 
-RUN yarn install --network-timeout 100000
+RUN npm install 
 
 EXPOSE 3000
 
-CMD ["yarn", "start"]
+CMD ["npm", "start"]
