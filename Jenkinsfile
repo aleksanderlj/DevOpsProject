@@ -20,7 +20,7 @@ docker-compose build'''
         echo 'Deploy here'
         sh '''
 #!/bin/bash
-caprover deploy'''
+sudo caprover deploy -i react_app -a react -n captain-01 -p jonatandahl'''
       }
     }
 
