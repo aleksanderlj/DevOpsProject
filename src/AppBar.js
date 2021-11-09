@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState } from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -20,7 +21,9 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { useTheme } from "@emotion/react";
 import { makeStyles } from "@mui/styles";
-import { Accessible, Adjust } from "@mui/icons-material";
+import { Accessible, Adjust, Login } from "@mui/icons-material";
+import { Button, Tooltip } from "@mui/material";
+import "./AppBar.css";
 
 const useStyles = makeStyles({});
 
@@ -59,6 +62,7 @@ export default function AppBar() {
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [activeSub, setActiveSub] = useState("All Posts");
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -87,7 +91,7 @@ export default function AppBar() {
   };
 
   const onSignInClick = () => {
-    history.push("/signin")
+    history.push("/signin");
     setAnchorEl(null);
     handleMobileMenuClose();
   };
@@ -117,15 +121,15 @@ export default function AppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem
+      {/*<MenuItem
         onClick={() => {
           goToProfile();
         }}
-      >
+
         Profile
-      </MenuItem>
-      <MenuItem onClick={handleMenuClose}>Log Out</MenuItem>
+      </MenuItem>*/}
       <MenuItem onClick={onSignInClick}>Sign In</MenuItem>
+      <MenuItem onClick={handleMenuClose}>Log Out</MenuItem>
     </Menu>
   );
 
@@ -177,60 +181,40 @@ export default function AppBar() {
     <Box sx={{ flexGrow: 1 }}>
       <ThisAppBar position="fixed" open={open} color={"secondary"}>
         <Toolbar>
-          {!open ? (
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              sx={{ mr: 2 }}
-              onClick={() => setOpen(!open)}
-            >
-              <MenuIcon />
-            </IconButton>
-          ) : null}
-          <Typography
-            variant="h4"
-            noWrap
-            align={"left"}
-            component="div"
-            sx={{ display: { xs: "none", sm: "block" } }}
+          <Button
+            size={"large"}
+            sx={{ fontSize: "30px" }}
+            color={"inherit"}
+            startIcon={!open ? <MenuIcon /> : null}
+            onClick={() => setOpen(!open)}
           >
             SHITPOSTING
-          </Typography>
-          <Box sx={{ flexGrow: 1 }}>
+          </Button>
+          <Box sx={{ margin: "auto" }}>
             <Typography
               variant="h6"
+              className={"mainSub"}
               align={"center"}
-              component="div"
               onClick={() => history.replace("/")}
-              sx={{ display: { xs: "block", sm: "block" } }}
               style={{ marginLeft: "-10em" }}
             >
-              ALL POSTS
+              {activeSub.toUpperCase()}
             </Typography>
           </Box>
           <Box sx={{ display: { xs: "flex", md: "flex" } }}>
-            {/* <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
-              <Badge badgeContent={2} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>*/}
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircleIcon />
-            </IconButton>
+            <Tooltip title={<h3>Login</h3>}>
+              <IconButton
+                size="large"
+                edge="end"
+                aria-label="account of current user"
+                aria-controls={menuId}
+                aria-haspopup="true"
+                onClick={handleProfileMenuOpen}
+                color="inherit"
+              >
+                <Login />
+              </IconButton>
+            </Tooltip>
           </Box>
         </Toolbar>
       </ThisAppBar>
@@ -261,7 +245,7 @@ export default function AppBar() {
         <Divider />
         <List>
           {[
-            "All",
+            "All Posts",
             "IAmTheAsshole",
             "the_donald",
             "jontron",
@@ -271,8 +255,16 @@ export default function AppBar() {
             "Angular",
             "CompilerTechnology",
           ].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon style={{ color: "white" }}>
+            <ListItem
+              onClick={() => {
+                setActiveSub(text);
+                setOpen(false);
+              }}
+              key={index}
+              className={activeSub === text ? "activeListItem" : "listItem"}
+              button
+            >
+              <ListItemIcon className={"listItemIcon"}>
                 {text === "IdiotsInWheelchairs" ? <Accessible /> : <Adjust />}
               </ListItemIcon>
               <ListItemText primary={text} />

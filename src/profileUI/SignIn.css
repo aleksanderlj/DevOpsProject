@@ -1,0 +1,17 @@
+.loginCard {
+    border: 5px solid #388e3c;
+}
+
+.loginCard:hover {
+    transform: scale(1.02);
+    transition: 0.3s ease-in-out;
+}
+
+.signupCard{
+    border: 5px solid #6d4c41;
+}
+
+.signupCard:hover {
+    transition: 0.3s ease-in-out;
+    transform: scale(1.02);
+}
