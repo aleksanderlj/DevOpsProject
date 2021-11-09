@@ -1,14 +1,12 @@
 FROM node:alpine
 
-COPY ["web/package.json", "web/"]
+WORKDIR /
 
-WORKDIR /web
+COPY . .
 
-ENV PATH /web/node_modules/.bin:$PATH
+ENV PATH /node_modules/.bin:$PATH
 
 RUN yarn install
-
-COPY ./web .
 
 EXPOSE 3000
 
