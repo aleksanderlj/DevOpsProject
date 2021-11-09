@@ -1,47 +1,233 @@
-import React from "react";
-import GoogleLogin, {GoogleLogout} from "react-google-login";
+import React, { useEffect, useState } from "react";
+import GoogleLogin from "react-google-login";
+import {
+  Button,
+  CardActions,
+  CardContent,
+  FormControl,
+  Grid,
+  InputLabel,
+  OutlinedInput,
+  Typography,
+  useTheme,
+} from "@mui/material";
+import Card from "@mui/material/Card";
+import "./SignIn.css";
+import { useHistory } from "react-router-dom";
 
-const clientId = "191430355915-jgfp9tt0cacihubuggmuqoooqolooord.apps.googleusercontent.com";
-const {REACT_APP_MONGODB} = process.env;
+const clientId =
+  "191430355915-jgfp9tt0cacihubuggmuqoooqolooord.apps.googleusercontent.com";
+const { REACT_APP_MONGODB } = process.env;
 
-export default function SignIn(){
-    const onSuccess = (res) => {
-        console.log("Login success for: ", res.profileObj);
-        console.log("Send to backend: ", res.getAuthResponse().id_token);
-        const requestOptions = {
-            method: 'POST',
-            headers: {'Content-Type': 'text/plain'},
-            body: res.getAuthResponse().id_token
-        };
-        console.log(REACT_APP_MONGODB);
-        fetch( process.env.REACT_APP_MONGODB + "/user/login/google", requestOptions)
-            .then(response => response.text())
-            .then(data => console.log(data));
+export default function SignIn() {
+  const theme = useTheme();
+  const history = useHistory();
+  const [loginSucces, setLoginSucces] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [newUsername, setNewUsername] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+
+  const onGoogleLoginSuccess = (res) => {
+    console.log("Login success for: ", res.profileObj);
+    console.log("Send to backend: ", res.getAuthResponse().id_token);
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "text/plain" },
+      body: res.getAuthResponse().id_token,
     };
+    console.log(REACT_APP_MONGODB);
+    fetch(process.env.REACT_APP_MONGODB + "/user/login/google", requestOptions)
+      .then((response) => response.text())
+      .then((data) => {
+        console.log(data);
+        setLoginSucces(true);
+      });
+  };
 
-    const onFailure = (res) => {
-        console.log("Login go nono", res);
+  const onGoogleLoginFailure = (res) => {
+    console.log("YOU CAN NEVER LEAVE", res);
+  };
+
+  const onLogoutSuccess = (res) => {
+    console.log("Logout success");
+  };
+
+  const onLogoutFailure = (res) => {
+    console.log("Logout go nono", res);
+  };
+
+  const loginFormSubmit = () => {
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      payload: { username: username, password: password },
+      mode: "cors",
     };
+    fetch(process.env.REACT_APP_MONGODB + "/user/login", requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setLoginSucces(true);
+      })
+      .catch((e) => {
+        window.alert(e);
+      });
+  };
 
-    const onLogoutSuccess = (res) => {
-        console.log("Logout success")
+  const signupFormSubmit = () => {
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      payload: { username: newUsername, password: newPassword },
+      mode: "cors",
     };
+    fetch(process.env.REACT_APP_MONGODB + "/user", requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setLoginSucces(true);
+      })
+      .catch((e) => window.alert(e));
+  };
 
-    const onLogoutFailure = (res) => {
-        console.log("Logout go nono", res);
-    };
+  useEffect(() => {
+    if (loginSucces === true) {
+      history.push("/");
+    }
+  }, [loginSucces]);
 
-    return(
-        <div>
-            <GoogleLogin clientId={clientId}
-                         buttonText="Login"
-                         onSuccess={onSuccess}
-                         onFailure={onFailure}
-                         cookiePolicy={'single_host_origin'}/>
-            <GoogleLogout clientId={clientId}
-                          buttonText="Logout"
-                          onLogoutSuccess={onLogoutSuccess}
-                          onFailure={onLogoutFailure}/>
-        </div>
-    )
+  return (
+    <Grid container spacing={4} justifyContent="center" alignItems="center">
+      <Grid item direction={"row"} xs={10} md={5} lg={5}>
+        <Card className={"loginCard"}>
+          <CardContent>
+            <Typography
+              color={theme.palette.secondary.main}
+              fontWeight={"bold"}
+              align={"left"}
+              variant="h5"
+              sx={{ marginBottom: "10px" }}
+            >
+              LOGIN
+            </Typography>
+            <form id="loginForm" onSubmit={() => loginFormSubmit()}>
+              <FormControl
+                sx={{ marginBottom: "15px" }}
+                fullWidth={true}
+                required={true}
+              >
+                <InputLabel>Username</InputLabel>
+                <OutlinedInput
+                  id="username"
+                  type={"username"}
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  label="Username*"
+                />
+              </FormControl>
+              <FormControl fullWidth={true} required={true}>
+                <InputLabel>Password</InputLabel>
+                <OutlinedInput
+                  id="password"
+                  type={"password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  label="Password*"
+                />
+              </FormControl>
+            </form>
+          </CardContent>
+          <CardActions sx={{ float: "right" }}>
+            <Button
+              form={"loginForm"}
+              type={"submit"}
+              variant={"contained"}
+              size="large"
+              disabled={username.length === 0 || password.length === 0}
+            >
+              LOGIN
+            </Button>
+            <GoogleLogin
+              clientId={clientId}
+              buttonText="Login with Google"
+              onSuccess={onGoogleLoginSuccess}
+              onFailure={onGoogleLoginFailure}
+              cookiePolicy={"single_host_origin"}
+            />
+            {/* <GoogleLogout clientId={clientId}
+                                  buttonText="Logout"
+                                  onLogoutSuccess={() => onLogoutSuccess}
+                                  onGoogleLoginFailure={() => onLogoutFailure}/>*/}
+          </CardActions>
+        </Card>
+      </Grid>
+      <Grid item direction={"row"} xs={10} md={5} lg={5}>
+        <Card className={"signupCard"}>
+          <CardContent>
+            <Typography
+              color={theme.palette.primary.main}
+              align={"right"}
+              fontWeight={"bold"}
+              variant="h5"
+              sx={{ marginBottom: "10px" }}
+            >
+              CREATE A NEW USER
+            </Typography>
+            <form id="signupForm" onSubmit={() => signupFormSubmit()}>
+              <FormControl
+                sx={{ marginBottom: "15px" }}
+                fullWidth={true}
+                required={true}
+              >
+                <InputLabel>Username</InputLabel>
+                <OutlinedInput
+                  id="newUsername"
+                  type={"username"}
+                  value={newUsername}
+                  onChange={(e) => setNewUsername(e.target.value)}
+                  label="Username*"
+                />
+              </FormControl>
+              <FormControl fullWidth={true} required={true}>
+                <InputLabel>Password</InputLabel>
+                <OutlinedInput
+                  id="newPassword"
+                  type={"password"}
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  label="Password*"
+                />
+              </FormControl>
+            </form>
+            <Typography
+              color={"red"}
+              sx={{ float: "left" }}
+              align={"left"}
+              variant="caption"
+            >
+              *BY SIGNING UP YOU ACCEPT OUR SHITTY SECURITY ;-)
+            </Typography>
+          </CardContent>
+          <CardActions sx={{ float: "right" }}>
+            <Button
+              form={"signupForm"}
+              type={"submit"}
+              variant={"contained"}
+              size="large"
+              disabled={newUsername.length === 0 || newPassword.length === 0}
+            >
+              *SIGN UP
+            </Button>
+          </CardActions>
+        </Card>
+      </Grid>
+    </Grid>
+  );
 }

@@ -1,0 +1,27 @@
+.mainSub {
+    transition: ease-in-out 0.3s;
+}
+
+.mainSub:hover {
+    transform: scale(1.8);
+    cursor: pointer;
+}
+
+.listItemIcon {
+    color: white !important;
+}
+
+.activeListItem {
+    background: #388e3c !important;
+    color: white !important;
+}
+
+.listItem {
+    color: white !important;
+}
+
+.listItem:hover {
+    background: #204e22 !important;
+    transition: 0.2s ease-in-out;
+    transform: scale(1.02);
+}
