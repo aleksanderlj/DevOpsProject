@@ -41,7 +41,8 @@ export default function SignIn() {
       .then((response) => response.text())
       .then((data) => {
         console.log(data);
-        setLoginSucces(true);
+        sessionStorage.setItem("token", data);
+        // setLoginSucces(true);
       });
   };
 
@@ -102,6 +103,12 @@ export default function SignIn() {
       history.push("/");
     }
   }, [loginSucces]);
+
+  useEffect(() => {
+    if (sessionStorage.getItem("token")) {
+      history.push("/");
+    }
+  }, [sessionStorage]);
 
   return (
     <Grid container spacing={4} justifyContent="center" alignItems="center">

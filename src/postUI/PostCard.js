@@ -8,10 +8,12 @@ import Typography from "@mui/material/Typography";
 import { Comment, Opacity } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { useTheme } from "@mui/material";
+import "./PostCard.css";
 
 const PostCard = ({
   title,
   description,
+  date,
   imageLink,
   commentCount,
   shitCount,
@@ -22,8 +24,10 @@ const PostCard = ({
 
   const theme = useTheme();
 
+  const dateObject = new Date(date);
+
   return (
-    <Card style={{ maxHeight: "20em" }}>
+    <Card className={"card"}>
       <CardMedia
         component="img"
         height={"150vh"}
@@ -31,14 +35,23 @@ const PostCard = ({
         alt={imageLink}
       />
       <CardContent style={{ marginBottom: "-1em" }}>
-        <Typography gutterBottom variant="h5" component="div" align={"left"}>
-          <Link
-            to={"/post/" + title.toString()}
-            style={{ color: theme.palette.primary.main }}
-          >
-            {title}
-          </Link>
-        </Typography>
+        <div>
+          <Typography gutterBottom variant="h5" component="div" align={"left"}>
+            <Link
+              to={"/post/" + title.toString()}
+              style={{ color: theme.palette.primary.main }}
+            >
+              {title}
+            </Link>
+            <Typography variant={"caption"} style={{ float: "right" }}>
+              {dateObject.toLocaleTimeString("en-GB", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+              })}
+            </Typography>
+          </Typography>
+        </div>
         <Typography variant="body2" color="text.secondary" align={"left"}>
           {truncate(description, 100)}
         </Typography>
