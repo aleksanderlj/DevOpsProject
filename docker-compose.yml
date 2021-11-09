@@ -3,7 +3,7 @@ version: "3"
 services:
   react_app:
     container_name: react_app
-    image: devops_react_app:latest
+    image: amtoft/devops_react_app:latest
     build:
       context: .
       dockerfile: Dockerfile
