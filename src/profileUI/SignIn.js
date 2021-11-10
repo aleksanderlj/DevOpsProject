@@ -116,6 +116,12 @@ export default function SignIn() {
     }
   }, [loginSucces]);
 
+  useEffect(() => {
+    if (sessionStorage.getItem("token")) {
+      history.push("/");
+    }
+  }, [sessionStorage]);
+
   return (
     <Grid container spacing={4} justifyContent="center" alignItems="center">
       <Grid item direction={"row"} xs={10} md={5} lg={5}>

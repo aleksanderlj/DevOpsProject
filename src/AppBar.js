@@ -150,26 +150,8 @@ export default function AppBar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      {/*<MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={2} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>*/}
       <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
+        <IconButton size="large" color="inherit">
           <AccountCircleIcon />
         </IconButton>
         <p>Profile</p>
@@ -206,9 +188,6 @@ export default function AppBar() {
               <IconButton
                 size="large"
                 edge="end"
-                aria-label="account of current user"
-                aria-controls={menuId}
-                aria-haspopup="true"
                 onClick={handleProfileMenuOpen}
                 color="inherit"
               >
