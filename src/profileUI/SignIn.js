@@ -85,11 +85,9 @@ export default function SignIn() {
     const requestOptions = {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json"
       },
-      payload: { username: newUsername, password: newPassword },
-      mode: "cors",
+      body: JSON.stringify({ "username": newUsername, "password": newPassword })
     };
     fetch(process.env.REACT_APP_MONGODB + "/user", requestOptions)
       .then((response) => response.json())
