@@ -8,12 +8,14 @@ import {
 } from "@mui/material";
 import { useCookies } from "react-cookie";
 import jwt from "jwt-decode"
+import { useHistory } from "react-router-dom";
 
 const CreatePost = () => {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [imageUrl, setImageUrl] = useState("");
     const [cookies, setCookie, removeCookie] = useCookies(['downvotedLogin']);
+    const history = useHistory();
 
     const createPostSubmit = () => {
         if(!cookies.downvotedLogin){
@@ -44,6 +46,7 @@ const CreatePost = () => {
             })
             .then((data) => {
                 console.log(data);
+                history.push("/");
             })
             .catch((e) => {
                 window.alert(e);
