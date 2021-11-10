@@ -61,14 +61,17 @@ export default function SignIn() {
     const requestOptions = {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json"
       },
-      payload: { username: username, password: password },
-      mode: "cors",
+      body: JSON.stringify({ "username": username, "password": password })
     };
     fetch(process.env.REACT_APP_MONGODB + "/user/login", requestOptions)
-      .then((response) => response.json())
+      .then((response) => {
+        if(!response.ok) {
+          throw new Error("Invalid login data");
+        }
+        return response.text();
+      })
       .then((data) => {
         console.log(data);
         setLoginSucces(true);
