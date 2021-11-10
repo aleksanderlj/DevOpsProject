@@ -5,6 +5,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { HashRouter } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material";
+import { CookiesProvider } from "react-cookie";
 
 const theme = createTheme({
   palette: {
@@ -19,11 +20,13 @@ const theme = createTheme({
 
 ReactDOM.render(
   <React.StrictMode>
+    <CookiesProvider>
     <ThemeProvider theme={theme}>
       <HashRouter>
         <App />
       </HashRouter>
     </ThemeProvider>
+    </CookiesProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

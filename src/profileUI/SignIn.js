@@ -14,6 +14,7 @@ import {
 import Card from "@mui/material/Card";
 import "./SignIn.css";
 import { useHistory } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 const clientId =
   "191430355915-jgfp9tt0cacihubuggmuqoooqolooord.apps.googleusercontent.com";
@@ -27,6 +28,7 @@ export default function SignIn() {
   const [password, setPassword] = useState("");
   const [newUsername, setNewUsername] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [cookies, setCookie, removeCookie] = useCookies(['downvotedLogin']);
 
   const onGoogleLoginSuccess = (res) => {
     console.log("Login success for: ", res.profileObj);
@@ -40,7 +42,8 @@ export default function SignIn() {
     fetch(process.env.REACT_APP_MONGODB + "/user/login/google", requestOptions)
       .then((response) => response.text())
       .then((data) => {
-        console.log(data);
+        setCookie("downvotedLogin", data, {path: "/"});
+        console.log("cookie: " + cookies.downvotedLogin);
         setLoginSucces(true);
       });
   };
@@ -74,6 +77,7 @@ export default function SignIn() {
       })
       .then((data) => {
         console.log(data);
+        setCookie("downvotedLogin", data, {path: "/"});
         setLoginSucces(true);
       })
       .catch((e) => {
@@ -90,12 +94,20 @@ export default function SignIn() {
       body: JSON.stringify({ "username": newUsername, "password": newPassword })
     };
     fetch(process.env.REACT_APP_MONGODB + "/user", requestOptions)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        setLoginSucces(true);
-      })
-      .catch((e) => window.alert(e));
+    .then((response) => {
+      if(!response.ok) {
+        throw new Error("User already exists");
+      }
+      return response.text();
+    })
+    .then((data) => {
+      console.log(data);
+      setCookie("downvotedLogin", data, {path: "/"});
+      setLoginSucces(true);
+    })
+    .catch((e) => {
+      window.alert(e);
+    });
   };
 
   useEffect(() => {

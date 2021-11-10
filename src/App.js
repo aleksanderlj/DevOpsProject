@@ -9,6 +9,7 @@ import MyProfile from "./profileUI/MyProfile";
 import SignIn from "./profileUI/SignIn";
 import PostPage from "./postUI/PostPage";
 import { useEffect, useState } from "react";
+import { withCookies } from "react-cookie";
 
 const jonaStore = new JonaStore();
 
@@ -105,4 +106,4 @@ const StoreStuff = observer(() => {
   );
 });
 
-export default observer(App);
+export default withCookies(observer(App));
