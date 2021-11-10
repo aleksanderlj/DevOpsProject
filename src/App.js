@@ -8,6 +8,7 @@ import PostContainer from "./postUI/PostContainer";
 import MyProfile from "./profileUI/MyProfile";
 import SignIn from "./profileUI/SignIn";
 import PostPage from "./postUI/PostPage";
+import CreatePost from "./postUI/CreatePost"
 import { useEffect, useState } from "react";
 import { withCookies } from "react-cookie";
 
@@ -37,6 +38,7 @@ function App() {
           <Route path={"/signin"} component={SignIn} />
           <Route path={"/storestuff"} component={StoreStuff} />
           <Route path={"/param/:text"} component={Param} />
+          <Route path={"/createpost"} component={CreatePost} />
           <Route path={"/post/:post"} component={PostPage} />
           <Route exact path={"/"} component={PostContainer} />
           <Route render={() => <h1>404</h1>} />

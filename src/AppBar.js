@@ -170,7 +170,7 @@ export default function AppBar() {
             startIcon={!open ? <MenuIcon /> : null}
             onClick={() => setOpen(!open)}
           >
-            SHITPOSTING
+            DOWNVOTED
           </Button>
           <Box sx={{ margin: "auto" }}>
             <Typography

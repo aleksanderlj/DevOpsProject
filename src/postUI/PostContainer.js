@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Grid, Skeleton } from "@mui/material";
+import { Fab, Grid, Skeleton } from "@mui/material";
 import PostCard from "./PostCard";
+import { Add } from "@mui/icons-material";
+import { useHistory } from "react-router-dom";
 
 const PostContainer = () => {
+  const history = useHistory();
   const [posts, setPosts] = useState(null);
   const skeletonPosts = [0, 1, 2, 3, 4, 5];
 
@@ -21,10 +24,17 @@ const PostContainer = () => {
     }
   }, []);
 
+  const fabStyle = {
+    right: 20,
+    bottom: 20,
+    position: 'fixed'
+  };
+
   return (
-    <Grid container justifyContent="center" alignItems="center" spacing={4}>
-      {posts
-        ? posts.map((post) => (
+    <div>
+      <Grid container justifyContent="center" alignItems="center" spacing={4}>
+        {posts
+          ? posts.map((post) => (
             <Grid item xs={11} sm={11} md={5}>
               <PostCard
                 key={post.id}
@@ -41,7 +51,7 @@ const PostContainer = () => {
               />
             </Grid>
           ))
-        : skeletonPosts.map((skeleton) => (
+          : skeletonPosts.map((skeleton) => (
             <Grid item xs={11} sm={11} md={5}>
               <Skeleton
                 variant={"rectangular"}
@@ -51,7 +61,11 @@ const PostContainer = () => {
               />
             </Grid>
           ))}
-    </Grid>
+      </Grid>
+      <Fab style={fabStyle} color="primary" aria-label="add" onClick={() => history.push("/createpost")}>
+        <Add />
+      </Fab>
+    </div>
   );
 };
 

@@ -15,6 +15,7 @@ import Card from "@mui/material/Card";
 import "./SignIn.css";
 import { useHistory } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import jwt from "jwt-decode"
 
 const clientId =
   "191430355915-jgfp9tt0cacihubuggmuqoooqolooord.apps.googleusercontent.com";
@@ -43,7 +44,6 @@ export default function SignIn() {
       .then((response) => response.text())
       .then((data) => {
         setCookie("downvotedLogin", data, {path: "/"});
-        console.log("cookie: " + cookies.downvotedLogin);
         setLoginSucces(true);
       });
   };
