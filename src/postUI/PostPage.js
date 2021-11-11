@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
+import { useCookies } from "react-cookie";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
@@ -12,6 +13,10 @@ import CommentsList from "./CommentsList";
 
 const PostPage = withRouter(({ history, match }) => {
   const [post, setPost] = useState(null);
+  const [liked, setLiked] = useState(false);
+  const [cookies, setCookie, removeCookie] = useCookies(["downvotedLogin"]);
+  const { REACT_APP_MONGODB } = process.env;
+
   useEffect(() => {
     if(!post){
       fetchPost();
@@ -26,6 +31,29 @@ const PostPage = withRouter(({ history, match }) => {
       })
       .catch((e) => window.alert(e));
   };
+
+  const likePost = () => {
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain",
+        "Authorization": cookies.downvotedLogin
+     }
+    };
+    fetch(process.env.REACT_APP_MONGODB + "/post/" + post.id + "/like", requestOptions)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Invalid login data");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if(data) {
+          post.likeCount++;
+          setLiked(true);
+        }
+      });
+  }
 
   return (
     <Grid container justifyContent="center" alignItems="center" spacing={4}>
@@ -62,6 +90,7 @@ const PostPage = withRouter(({ history, match }) => {
               style={{ color: "brown" }}
               size="medium"
               endIcon={<Opacity />}
+              onClick={() => likePost()}
             >
               {post?.likeCount}
             </Button>
