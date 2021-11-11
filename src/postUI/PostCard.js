@@ -1,4 +1,5 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -25,8 +26,92 @@ const PostCard = ({
 
   const theme = useTheme();
   const history = useHistory();
+  const [liked, setLiked] = useState(null);
+  const [likeCount, setLikeCount] = useState(shitCount);
+  const [cookies, setCookie, removeCookie] = useCookies(["downvotedLogin"]);
+  const { REACT_APP_MONGODB } = process.env;
 
   const dateObject = new Date(date);
+
+  useEffect(() => {
+    if(!liked){
+      fetchLikeStatus();
+    }
+  });
+
+  const fetchLikeStatus = () => {
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        "Content-Type": "text/plain",
+        "Authorization": cookies.downvotedLogin
+     }
+    };
+    fetch(process.env.REACT_APP_MONGODB + "/post/" + postId + "/likestatus", requestOptions)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Invalid login data");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setLiked(data);
+      });
+  }
+
+  const likePost = () => {
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain",
+        "Authorization": cookies.downvotedLogin
+     }
+    };
+    fetch(process.env.REACT_APP_MONGODB + "/post/" + postId + "/like", requestOptions)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Invalid login data");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if(data) {
+          setLikeCount((count) => count+1);
+        }
+        setLiked(true);
+      });
+  }
+
+  const unlikePost = () => {
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain",
+        "Authorization": cookies.downvotedLogin
+     }
+    };
+    fetch(process.env.REACT_APP_MONGODB + "/post/" + postId + "/unlike", requestOptions)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Invalid login data");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if(data) {
+          setLikeCount((count) => count-1);
+        }
+        setLiked(false);
+      });
+  }
+
+  const votePost = () => {
+    if(!liked) {
+      likePost();
+    } else {
+      unlikePost();
+    }
+  }
 
   return (
     <Card className={"card"}>
@@ -76,8 +161,9 @@ const PostCard = ({
           style={{ color: theme.palette.secondary.main }}
           size="medium"
           endIcon={<Opacity />}
+          onClick={() => votePost()}
         >
-          {shitCount}
+          {likeCount}
         </Button>
       </CardActions>
     </Card>
