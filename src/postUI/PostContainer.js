@@ -95,7 +95,7 @@ const PostContainer = () => {
                   }
                   date={post.postDate}
                   commentCount={233}
-                  shitCount={1253}
+                  shitCount={post.likeCount}
                 />
               </Grid>
             ))
