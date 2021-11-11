@@ -6,7 +6,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Comment, Opacity } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useTheme } from "@mui/material";
 import "./PostCard.css";
 
@@ -23,6 +23,7 @@ const PostCard = ({
   };
 
   const theme = useTheme();
+  const history = useHistory();
 
   const dateObject = new Date(date);
 
@@ -33,16 +34,22 @@ const PostCard = ({
         height={"150vh"}
         image={imageLink}
         alt={imageLink}
+        onClick={() => history.push("/post/" + title.toString())}
       />
-      <CardContent style={{ marginBottom: "-1em" }}>
+      <CardContent
+        style={{ marginBottom: "-1em" }}
+        onClick={() => history.push("/post/" + title.toString())}
+      >
         <div>
-          <Typography gutterBottom variant="h5" component="div" align={"left"}>
-            <Link
-              to={"/post/" + title.toString()}
-              style={{ color: theme.palette.primary.main }}
-            >
-              {title}
-            </Link>
+          <Typography
+            color={theme.palette.primary.main}
+            gutterBottom
+            variant="h5"
+            component="div"
+            align={"left"}
+            fontWeight={"bold"}
+          >
+            {title}
             <Typography variant={"caption"} style={{ float: "right" }}>
               {dateObject.toLocaleTimeString("en-GB", {
                 day: "2-digit",

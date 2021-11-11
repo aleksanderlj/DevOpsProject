@@ -15,7 +15,6 @@ import Card from "@mui/material/Card";
 import "./SignIn.css";
 import { useHistory } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import jwt from "jwt-decode"
 
 const clientId =
   "191430355915-jgfp9tt0cacihubuggmuqoooqolooord.apps.googleusercontent.com";
@@ -24,12 +23,11 @@ const { REACT_APP_MONGODB } = process.env;
 export default function SignIn() {
   const theme = useTheme();
   const history = useHistory();
-  const [loginSucces, setLoginSucces] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [newUsername, setNewUsername] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [cookies, setCookie, removeCookie] = useCookies(['downvotedLogin']);
+  const [cookies, setCookie, removeCookie] = useCookies(["downvotedLogin"]);
 
   const onGoogleLoginSuccess = (res) => {
     console.log("Login success for: ", res.profileObj);
@@ -43,8 +41,7 @@ export default function SignIn() {
     fetch(process.env.REACT_APP_MONGODB + "/user/login/google", requestOptions)
       .then((response) => response.text())
       .then((data) => {
-        setCookie("downvotedLogin", data, {path: "/"});
-        setLoginSucces(true);
+        setCookie("downvotedLogin", data, { path: "/" });
       });
   };
 
@@ -64,21 +61,20 @@ export default function SignIn() {
     const requestOptions = {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ "username": username, "password": password })
+      body: JSON.stringify({ username: username, password: password }),
     };
     fetch(process.env.REACT_APP_MONGODB + "/user/login", requestOptions)
       .then((response) => {
-        if(!response.ok) {
+        if (!response.ok) {
           throw new Error("Invalid login data");
         }
         return response.text();
       })
       .then((data) => {
         console.log(data);
-        setCookie("downvotedLogin", data, {path: "/"});
-        setLoginSucces(true);
+        setCookie("downvotedLogin", data, { path: "/" });
       })
       .catch((e) => {
         window.alert(e);
@@ -89,42 +85,35 @@ export default function SignIn() {
     const requestOptions = {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ "username": newUsername, "password": newPassword })
+      body: JSON.stringify({ username: newUsername, password: newPassword }),
     };
     fetch(process.env.REACT_APP_MONGODB + "/user", requestOptions)
-    .then((response) => {
-      if(!response.ok) {
-        throw new Error("User already exists");
-      }
-      return response.text();
-    })
-    .then((data) => {
-      console.log(data);
-      setCookie("downvotedLogin", data, {path: "/"});
-      setLoginSucces(true);
-    })
-    .catch((e) => {
-      window.alert(e);
-    });
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("User already exists");
+        }
+        return response.text();
+      })
+      .then((data) => {
+        console.log(data);
+        setCookie("downvotedLogin", data, { path: "/" });
+      })
+      .catch((e) => {
+        window.alert(e);
+      });
   };
 
   useEffect(() => {
-    if (loginSucces === true) {
-      history.push("/");
+    if (cookies.downvotedLogin) {
+      history.push("/lol");
     }
-  }, [loginSucces]);
-
-  useEffect(() => {
-    if (sessionStorage.getItem("token")) {
-      history.push("/");
-    }
-  }, [sessionStorage]);
+  }, [cookies]);
 
   return (
     <Grid container spacing={4} justifyContent="center" alignItems="center">
-      <Grid item direction={"row"} xs={10} md={5} lg={5}>
+      <Grid item xs={10} md={5} lg={5}>
         <Card className={"loginCard"}>
           <CardContent>
             <Typography

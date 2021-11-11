@@ -1,5 +1,5 @@
 import "./App.css";
-import { Route, Switch, withRouter } from "react-router-dom";
+import { Redirect, Route, Switch, withRouter } from "react-router-dom";
 import JonaStore from "./stores/JonaStore";
 import { observer } from "mobx-react-lite";
 import { Button } from "@mui/material";
@@ -8,20 +8,13 @@ import PostContainer from "./postUI/PostContainer";
 import MyProfile from "./profileUI/MyProfile";
 import SignIn from "./profileUI/SignIn";
 import PostPage from "./postUI/PostPage";
-import CreatePost from "./postUI/CreatePost"
-import { useEffect, useState } from "react";
-import { withCookies } from "react-cookie";
+import CreatePost from "./postUI/CreatePost";
+import { useCookies, withCookies } from "react-cookie";
 
 const jonaStore = new JonaStore();
 
 function App() {
-  const [token, setToken] = useState(null);
-
-  useEffect(() => {
-    if (sessionStorage.getItem("token")) {
-      setToken(sessionStorage.getItem("token"));
-    }
-  }, []);
+  const [cookies, setCookie, removeCookie] = useCookies(["downvotedLogin"]);
 
   return (
     <>
@@ -34,8 +27,12 @@ function App() {
         }}
       >
         <Switch>
-          <Route path={"/profile"} component={MyProfile} />
-          <Route path={"/signin"} component={SignIn} />
+          <Route path={"/profile"}>
+            {!cookies.downvotedLogin ? <Redirect to="/" /> : <MyProfile />}
+          </Route>
+          <Route path={"/signin"}>
+            {!cookies.downvotedLogin ? <SignIn /> : <Redirect to="/" />}
+          </Route>
           <Route path={"/storestuff"} component={StoreStuff} />
           <Route path={"/param/:text"} component={Param} />
           <Route path={"/createpost"} component={CreatePost} />

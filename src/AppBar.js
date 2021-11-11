@@ -24,6 +24,7 @@ import { makeStyles } from "@mui/styles";
 import { Accessible, Adjust, Login } from "@mui/icons-material";
 import { Button, Tooltip } from "@mui/material";
 import "./AppBar.css";
+import { useCookies } from "react-cookie";
 
 const useStyles = makeStyles({});
 
@@ -57,12 +58,12 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 
 export default function AppBar() {
   const history = useHistory();
-  const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [activeSub, setActiveSub] = useState("All Posts");
+  const [cookies, setCookie, removeCookie] = useCookies(["downvotedLogin"]);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -96,6 +97,13 @@ export default function AppBar() {
     handleMobileMenuClose();
   };
 
+  const onSignOutClick = () => {
+    removeCookie("downvotedLogin");
+    history.push("/signin");
+    setAnchorEl(null);
+    handleMobileMenuClose();
+  };
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -121,15 +129,20 @@ export default function AppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      {/*<MenuItem
-        onClick={() => {
-          goToProfile();
-        }}
-
-        Profile
-      </MenuItem>*/}
-      <MenuItem onClick={onSignInClick}>Sign In</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Log Out</MenuItem>
+      {!cookies.downvotedLogin ? (
+        <MenuItem onClick={onSignInClick}>Sign In</MenuItem>
+      ) : (
+        <>
+          <MenuItem
+            onClick={() => {
+              goToProfile();
+            }}
+          >
+            Profile
+          </MenuItem>
+          <MenuItem onClick={() => onSignOutClick()}>Log Out</MenuItem>
+        </>
+      )}
     </Menu>
   );
 
@@ -150,9 +163,13 @@ export default function AppBar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem onClick={handleProfileMenuOpen}>
+      <MenuItem
+        onClick={
+          !cookies.downvotedLogin ? onSignInClick : handleProfileMenuOpen
+        }
+      >
         <IconButton size="large" color="inherit">
-          <AccountCircleIcon />
+          {!cookies.downvotedLogin ? <Login /> : <AccountCircleIcon />}
         </IconButton>
         <p>Profile</p>
       </MenuItem>
@@ -184,14 +201,22 @@ export default function AppBar() {
             </Typography>
           </Box>
           <Box sx={{ display: { xs: "flex", md: "flex" } }}>
-            <Tooltip title={<h3>Login</h3>}>
+            <Tooltip
+              title={
+                !cookies.downvotedLogin ? <h3>Login</h3> : <h3>Profile</h3>
+              }
+            >
               <IconButton
                 size="large"
                 edge="end"
-                onClick={handleProfileMenuOpen}
+                onClick={
+                  !cookies.downvotedLogin
+                    ? onSignInClick
+                    : handleProfileMenuOpen
+                }
                 color="inherit"
               >
-                <Login />
+                {!cookies.downvotedLogin ? <Login /> : <AccountCircleIcon />}
               </IconButton>
             </Tooltip>
           </Box>
