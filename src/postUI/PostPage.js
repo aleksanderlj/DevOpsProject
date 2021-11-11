@@ -13,13 +13,16 @@ import CommentsList from "./CommentsList";
 
 const PostPage = withRouter(({ history, match }) => {
   const [post, setPost] = useState(null);
-  const [liked, setLiked] = useState(false);
+  const [liked, setLiked] = useState(null);
   const [cookies, setCookie, removeCookie] = useCookies(["downvotedLogin"]);
   const { REACT_APP_MONGODB } = process.env;
 
   useEffect(() => {
     if(!post){
       fetchPost();
+    }
+    if(post && !liked){
+      fetchLikeStatus();
     }
   });
 
@@ -31,6 +34,26 @@ const PostPage = withRouter(({ history, match }) => {
       })
       .catch((e) => window.alert(e));
   };
+
+  const fetchLikeStatus = () => {
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        "Content-Type": "text/plain",
+        "Authorization": cookies.downvotedLogin
+     }
+    };
+    fetch(process.env.REACT_APP_MONGODB + "/post/" + post.id + "/likestatus", requestOptions)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Invalid login data");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setLiked(data);
+      });
+  }
 
   const likePost = () => {
     const requestOptions = {
@@ -50,9 +73,40 @@ const PostPage = withRouter(({ history, match }) => {
       .then((data) => {
         if(data) {
           post.likeCount++;
-          setLiked(true);
         }
+        setLiked(true);
       });
+  }
+
+  const unlikePost = () => {
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain",
+        "Authorization": cookies.downvotedLogin
+     }
+    };
+    fetch(process.env.REACT_APP_MONGODB + "/post/" + post.id + "/unlike", requestOptions)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Invalid login data");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if(data) {
+          post.likeCount--;
+        }
+        setLiked(false);
+      });
+  }
+
+  const votePost = () => {
+    if(!liked) {
+      likePost();
+    } else {
+      unlikePost();
+    }
   }
 
   return (
@@ -90,7 +144,7 @@ const PostPage = withRouter(({ history, match }) => {
               style={{ color: "brown" }}
               size="medium"
               endIcon={<Opacity />}
-              onClick={() => likePost()}
+              onClick={() => votePost()}
             >
               {post?.likeCount}
             </Button>
