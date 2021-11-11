@@ -11,6 +11,7 @@ import { useTheme } from "@mui/material";
 import "./PostCard.css";
 
 const PostCard = ({
+  postId,
   title,
   description,
   date,
@@ -34,11 +35,11 @@ const PostCard = ({
         height={"150vh"}
         image={imageLink}
         alt={imageLink}
-        onClick={() => history.push("/post/" + title.toString())}
+        onClick={() => history.push("/post/" + postId)}
       />
       <CardContent
         style={{ marginBottom: "-1em" }}
-        onClick={() => history.push("/post/" + title.toString())}
+        onClick={() => history.push("/post/" + postId)}
       >
         <div>
           <Typography

@@ -86,6 +86,7 @@ const PostContainer = () => {
               <Grid item xs={11} sm={11} md={5}>
                 <PostCard
                   key={post.id}
+                  postId={post.id}
                   title={post.title}
                   description={post.content}
                   imageLink={

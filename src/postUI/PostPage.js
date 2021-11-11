@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
@@ -11,6 +11,22 @@ import { Grid } from "@mui/material";
 import CommentsList from "./CommentsList";
 
 const PostPage = withRouter(({ history, match }) => {
+  const [post, setPost] = useState(null);
+  useEffect(() => {
+    if(!post){
+      fetchPost();
+    }
+  });
+
+  const fetchPost = () => {
+    fetch(process.env.REACT_APP_MONGODB + "/post/" + match.params.post)
+      .then((response) => response.json())
+      .then((data) => {
+        setPost(data);
+      })
+      .catch((e) => window.alert(e));
+  };
+
   return (
     <Grid container justifyContent="center" alignItems="center" spacing={4}>
       <Grid item xs={12} sm={12} md={11}>
@@ -18,12 +34,8 @@ const PostPage = withRouter(({ history, match }) => {
           <CardMedia
             component="img"
             height={"100%"}
-            image={
-              "https://media.vanityfair.com/photos/5f5156490ca7fe28f9ec3f55/16:9/w_1280,c_limit/feels-good-man-film.jpg"
-            }
-            alt={
-              "https://media.vanityfair.com/photos/5f5156490ca7fe28f9ec3f55/16:9/w_1280,c_limit/feels-good-man-film.jpg"
-            }
+            image={post?.imageUrl}
+            alt={post?.imageUrl}
           />
           <CardContent style={{ marginBottom: "-1em" }}>
             <Typography
@@ -32,10 +44,10 @@ const PostPage = withRouter(({ history, match }) => {
               component="div"
               align={"left"}
             >
-              {match.params.post}
+              {post?.title}
             </Typography>
             <Typography variant="body2" color="text.secondary" align={"left"}>
-              {match.params.post}
+              {post?.content}
             </Typography>
           </CardContent>
           <CardActions disableSpacing style={{ float: "right" }}>
@@ -44,14 +56,14 @@ const PostPage = withRouter(({ history, match }) => {
               size="medium"
               endIcon={<Comment />}
             >
-              {match.params.post}
+              {0}
             </Button>
             <Button
               style={{ color: "brown" }}
               size="medium"
               endIcon={<Opacity />}
             >
-              {match.params.post}
+              {post?.likeCount}
             </Button>
           </CardActions>
         </Card>
