@@ -7,7 +7,7 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
-import { Comment, Opacity } from "@mui/icons-material";
+import { Comment, Opacity, ThumbDown } from "@mui/icons-material";
 import { Grid } from "@mui/material";
 import CommentsList from "./CommentsList";
 
@@ -149,7 +149,7 @@ const PostPage = withRouter(({ history, match }) => {
             <Button
               style={{ color: "brown" }}
               size="medium"
-              endIcon={<Opacity />}
+              endIcon={<ThumbDown />}
               onClick={() => votePost()}
             >
               {post?.likeCount}

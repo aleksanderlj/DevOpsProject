@@ -6,7 +6,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { Comment, Opacity } from "@mui/icons-material";
+import { Comment, Opacity, ThumbDown } from "@mui/icons-material";
 import { useHistory } from "react-router-dom";
 import { useTheme } from "@mui/material";
 import "./PostCard.css";
@@ -167,7 +167,7 @@ const PostCard = ({
         <Button
           style={{ color: theme.palette.secondary.main }}
           size="medium"
-          endIcon={<Opacity />}
+          endIcon={<ThumbDown />}
           onClick={() => votePost()}
         >
           {likeCount}
