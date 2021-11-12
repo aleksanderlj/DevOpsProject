@@ -21,7 +21,7 @@ const PostPage = withRouter(({ history, match }) => {
     if(!post){
       fetchPost();
     }
-    if(post && !liked){
+    if(post && !liked && cookies.downvotedLogin){
       fetchLikeStatus();
     }
   });
@@ -52,6 +52,8 @@ const PostPage = withRouter(({ history, match }) => {
       })
       .then((data) => {
         setLiked(data);
+      }).catch((e) => {
+        console.log(e);
       });
   }
 
@@ -75,6 +77,8 @@ const PostPage = withRouter(({ history, match }) => {
           post.likeCount++;
         }
         setLiked(true);
+      }).catch((e) => {
+        console.log(e);
       });
   }
 
@@ -98,6 +102,8 @@ const PostPage = withRouter(({ history, match }) => {
           post.likeCount--;
         }
         setLiked(false);
+      }).catch((e) => {
+        console.log(e);
       });
   }
 

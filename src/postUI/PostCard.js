@@ -34,7 +34,7 @@ const PostCard = ({
   const dateObject = new Date(date);
 
   useEffect(() => {
-    if(!liked){
+    if(!liked && cookies.downvotedLogin){
       fetchLikeStatus();
     }
   });
@@ -56,6 +56,9 @@ const PostCard = ({
       })
       .then((data) => {
         setLiked(data);
+      })
+      .catch((e) => {
+        console.log(e);
       });
   }
 
@@ -79,6 +82,8 @@ const PostCard = ({
           setLikeCount((count) => count+1);
         }
         setLiked(true);
+      }).catch((e) => {
+        console.log(e);
       });
   }
 
@@ -102,6 +107,8 @@ const PostCard = ({
           setLikeCount((count) => count-1);
         }
         setLiked(false);
+      }).catch((e) => {
+        console.log(e);
       });
   }
 
