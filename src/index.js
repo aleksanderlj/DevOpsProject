@@ -6,6 +6,18 @@ import reportWebVitals from "./reportWebVitals";
 import { HashRouter } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { CookiesProvider } from "react-cookie";
+import * as Sentry from "@sentry/react";
+import { Integrations } from "@sentry/tracing";
+
+Sentry.init({
+    dsn: "https://7611cb61302747dbaf108620dee7dc73@o472376.ingest.sentry.io/6066206",
+    integrations: [new Integrations.BrowserTracing()],
+
+    // Set tracesSampleRate to 1.0 to capture 100%
+    // of transactions for performance monitoring.
+    // We recommend adjusting this value in production
+    tracesSampleRate: 1.0,
+});
 
 const theme = createTheme({
   palette: {
