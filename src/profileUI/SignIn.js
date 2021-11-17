@@ -107,7 +107,7 @@ export default function SignIn() {
 
   useEffect(() => {
     if (cookies.downvotedLogin) {
-      history.push("/lol");
+      history.push("/");
     }
   }, [cookies]);
 
