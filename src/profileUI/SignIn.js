@@ -123,7 +123,7 @@ export default function SignIn() {
               variant="h5"
               sx={{ marginBottom: "10px" }}
             >
-              LOGIN JOE
+              LOGIN
             </Typography>
             <form id="loginForm" onSubmit={() => loginFormSubmit()}>
               <FormControl
