@@ -12,23 +12,27 @@ import {
   useTheme,
 } from "@mui/material";
 import PostCard from "./PostCard";
-import { Add } from "@mui/icons-material";
+import { Add, Help } from "@mui/icons-material";
 import CreatePost from "./CreatePost";
 import { useCookies } from "react-cookie";
+import { useHistory } from "react-router-dom";
+import RESTStore from "../stores/RESTStore";
+import { observer } from "mobx-react-lite";
 
 const fabStyle = {
   right: 20,
   bottom: 20,
   position: "fixed",
+  overflow: "hidden",
 };
-
+const restStore = new RESTStore();
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const PostContainer = () => {
+const PostContainer = observer(() => {
   const theme = useTheme();
-  const [posts, setPosts] = useState(null);
+  const history = useHistory();
   const skeletonPosts = [0, 1, 2, 3, 4, 5];
   const [open, setOpen] = useState(false);
   const [newPostToFetch, setNewPostToFetch] = useState(false);
@@ -46,22 +50,44 @@ const PostContainer = () => {
     setNewPostToFetch(true);
   };
 
-  const fetchPosts = () => {
-    fetch(process.env.REACT_APP_MONGODB + "/post")
-      .then((response) => response.json())
-      .then((data) => {
-        setPosts(data);
-      })
-      .catch((e) => window.alert(e));
-  };
+  useEffect(() => {
+    setNewPostToFetch(true);
+  }, [history.location.pathname]);
 
   useEffect(() => {
-    if (!posts) {
-      fetchPosts();
-    } else if (posts && newPostToFetch) {
-      fetchPosts();
-      setOpen(false);
-      setNewPostToFetch(false);
+    if (
+      history.location.pathname.substring(1) !== "All Posts" &&
+      newPostToFetch
+    ) {
+      console.log("Fetcher nyt fra sub");
+      restStore
+        .fetchPostsFromSub(history.location.pathname.substring(1))
+        .then(() => {
+          setOpen(false);
+          setNewPostToFetch(false);
+        });
+    }
+  }, [newPostToFetch]);
+
+  useEffect(() => {
+    if (
+      history.location.pathname.substring(1) === "All Posts" &&
+      restStore.posts.length === 0
+    ) {
+      console.log("Fetcher nyt fra ALL");
+      restStore.fetchAllPosts().then(() => {
+        setOpen(false);
+        setNewPostToFetch(false);
+      });
+    } else if (
+      history.location.pathname.substring(1) === "All Posts" &&
+      newPostToFetch
+    ) {
+      console.log("Fetcher nyt fra ALL med refresh");
+      restStore.fetchAllPosts().then(() => {
+        setOpen(false);
+        setNewPostToFetch(false);
+      });
     }
   }, [newPostToFetch]);
 
@@ -81,8 +107,8 @@ const PostContainer = () => {
         </DialogContent>
       </Dialog>
       <Grid container justifyContent="center" alignItems="center" spacing={4}>
-        {posts
-          ? posts.map((post) => (
+        {restStore?.posts?.length > 0
+          ? restStore.posts.map((post) => (
               <Grid item xs={11} sm={11} md={5}>
                 <PostCard
                   key={post.id}
@@ -95,8 +121,10 @@ const PostContainer = () => {
                       : "https://media.vanityfair.com/photos/5f5156490ca7fe28f9ec3f55/16:9/w_1280,c_limit/feels-good-man-film.jpg"
                   }
                   date={post.postDate}
-                  commentCount={233}
+                  commentCount={5}
                   shitCount={post.likeCount}
+                  subforum={post.subforum}
+                  author={post.author}
                 />
               </Grid>
             ))
@@ -112,25 +140,37 @@ const PostContainer = () => {
             ))}
       </Grid>
       <Tooltip
+        placement={"left"}
         title={
           <Typography variant={"button"}>
-            {cookies.downvotedLogin
-              ? "Create a new post"
-              : "You need to login to submit posts"}
+            {!cookies.downvotedLogin
+              ? "You need to login to submit posts"
+              : "Create a new post"}
           </Typography>
         }
       >
         <Fab
-          disabled={!cookies.downvotedLogin}
+          sx={{
+            display:
+              history.location.pathname.substring(1) === "All Posts"
+                ? "none"
+                : "",
+          }}
+          disableFocusRipple={!cookies.downvotedLogin}
+          disableTouchRipple={!cookies.downvotedLogin}
           style={fabStyle}
           color="primary"
-          onClick={() => handleClickOpen()}
+          onClick={() =>
+            !cookies.downvotedLogin
+              ? history.push("/signin")
+              : handleClickOpen()
+          }
         >
-          <Add />
+          {!cookies.downvotedLogin ? <Help /> : <Add />}
         </Fab>
       </Tooltip>
     </div>
   );
-};
+});
 
 export default PostContainer;

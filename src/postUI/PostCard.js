@@ -6,9 +6,9 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { Comment, Opacity, ThumbDown } from "@mui/icons-material";
+import { Comment, ThumbDown, ThumbDownOffAlt } from "@mui/icons-material";
 import { useHistory } from "react-router-dom";
-import { useTheme } from "@mui/material";
+import { Tooltip, useTheme } from "@mui/material";
 import "./PostCard.css";
 
 const PostCard = ({
@@ -19,6 +19,8 @@ const PostCard = ({
   imageLink,
   commentCount,
   shitCount,
+  subforum,
+  author,
 }) => {
   const truncate = (str, n) => {
     return str.length > n ? str.substr(0, n - 1) + " ..." : str;
@@ -27,27 +29,32 @@ const PostCard = ({
   const theme = useTheme();
   const history = useHistory();
   const [liked, setLiked] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [likeCount, setLikeCount] = useState(shitCount);
   const [cookies, setCookie, removeCookie] = useCookies(["downvotedLogin"]);
-  const { REACT_APP_MONGODB } = process.env;
+  const REACT_APP_MONGODB = process.env;
 
   const dateObject = new Date(date);
 
   useEffect(() => {
-    if(!liked && cookies.downvotedLogin){
+    if (!liked && !loading && cookies.downvotedLogin) {
       fetchLikeStatus();
     }
   });
 
   const fetchLikeStatus = () => {
+    setLoading(true);
     const requestOptions = {
       method: "GET",
       headers: {
         "Content-Type": "text/plain",
-        "Authorization": cookies.downvotedLogin
-     }
+        Authorization: cookies.downvotedLogin,
+      },
     };
-    fetch(process.env.REACT_APP_MONGODB + "/post/" + postId + "/likestatus", requestOptions)
+    fetch(
+      process.env.REACT_APP_MONGODB + "/post/" + postId + "/likestatus",
+      requestOptions
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Invalid login data");
@@ -56,21 +63,25 @@ const PostCard = ({
       })
       .then((data) => {
         setLiked(data);
+        setLoading(false);
       })
       .catch((e) => {
         console.log(e);
       });
-  }
+  };
 
   const likePost = () => {
     const requestOptions = {
       method: "POST",
       headers: {
         "Content-Type": "text/plain",
-        "Authorization": cookies.downvotedLogin
-     }
+        Authorization: cookies.downvotedLogin,
+      },
     };
-    fetch(process.env.REACT_APP_MONGODB + "/post/" + postId + "/like", requestOptions)
+    fetch(
+      process.env.REACT_APP_MONGODB + "/post/" + postId + "/like",
+      requestOptions
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Invalid login data");
@@ -78,24 +89,28 @@ const PostCard = ({
         return response.json();
       })
       .then((data) => {
-        if(data) {
-          setLikeCount((count) => count+1);
+        if (data) {
+          setLikeCount((count) => count + 1);
         }
         setLiked(true);
-      }).catch((e) => {
+      })
+      .catch((e) => {
         console.log(e);
       });
-  }
+  };
 
   const unlikePost = () => {
     const requestOptions = {
       method: "POST",
       headers: {
         "Content-Type": "text/plain",
-        "Authorization": cookies.downvotedLogin
-     }
+        Authorization: cookies.downvotedLogin,
+      },
     };
-    fetch(process.env.REACT_APP_MONGODB + "/post/" + postId + "/unlike", requestOptions)
+    fetch(
+      process.env.REACT_APP_MONGODB + "/post/" + postId + "/unlike",
+      requestOptions
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Invalid login data");
@@ -103,22 +118,23 @@ const PostCard = ({
         return response.json();
       })
       .then((data) => {
-        if(data) {
-          setLikeCount((count) => count-1);
+        if (data) {
+          setLikeCount((count) => count - 1);
         }
         setLiked(false);
-      }).catch((e) => {
+      })
+      .catch((e) => {
         console.log(e);
       });
-  }
+  };
 
   const votePost = () => {
-    if(!liked) {
+    if (!liked) {
       likePost();
     } else {
       unlikePost();
     }
-  }
+  };
 
   return (
     <Card className={"card"}>
@@ -134,6 +150,14 @@ const PostCard = ({
         onClick={() => history.push("/post/" + postId)}
       >
         <div>
+          <Typography variant={"caption"} style={{ float: "right" }}>
+            {dateObject.toLocaleTimeString("en-GB", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+            })}
+            &nbsp;on&nbsp;"{!subforum ? "All Posts" : subforum}" by {author}
+          </Typography>
           <Typography
             color={theme.palette.primary.main}
             gutterBottom
@@ -143,13 +167,6 @@ const PostCard = ({
             fontWeight={"bold"}
           >
             {title}
-            <Typography variant={"caption"} style={{ float: "right" }}>
-              {dateObject.toLocaleTimeString("en-GB", {
-                day: "2-digit",
-                month: "2-digit",
-                year: "numeric",
-              })}
-            </Typography>
           </Typography>
         </div>
         <Typography variant="body2" color="text.secondary" align={"left"}>
@@ -164,14 +181,25 @@ const PostCard = ({
         >
           {commentCount}
         </Button>
-        <Button
-          style={{ color: theme.palette.secondary.main }}
-          size="medium"
-          endIcon={<ThumbDown />}
-          onClick={() => votePost()}
+        <Tooltip
+          title={
+            !cookies.downvotedLogin ? "You need to be logged in to vote!" : ""
+          }
+          placement={"top"}
         >
-          {likeCount}
-        </Button>
+          <Button
+            style={{ color: theme.palette.secondary.main }}
+            size="medium"
+            endIcon={liked ? <ThumbDown /> : <ThumbDownOffAlt />}
+            onClick={() => {
+              cookies.downvotedLogin
+                ? votePost()
+                : console.log("User not logged in");
+            }}
+          >
+            {likeCount}
+          </Button>
+        </Tooltip>
       </CardActions>
     </Card>
   );

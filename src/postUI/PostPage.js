@@ -7,7 +7,7 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
-import { Comment, Opacity, ThumbDown } from "@mui/icons-material";
+import { Comment, ThumbDown } from "@mui/icons-material";
 import { Grid } from "@mui/material";
 import CommentsList from "./CommentsList";
 
@@ -18,10 +18,10 @@ const PostPage = withRouter(({ history, match }) => {
   const { REACT_APP_MONGODB } = process.env;
 
   useEffect(() => {
-    if(!post){
+    if (!post) {
       fetchPost();
     }
-    if(post && !liked && cookies.downvotedLogin){
+    if (post && !liked && cookies.downvotedLogin) {
       fetchLikeStatus();
     }
   });
@@ -40,10 +40,13 @@ const PostPage = withRouter(({ history, match }) => {
       method: "GET",
       headers: {
         "Content-Type": "text/plain",
-        "Authorization": cookies.downvotedLogin
-     }
+        Authorization: cookies.downvotedLogin,
+      },
     };
-    fetch(process.env.REACT_APP_MONGODB + "/post/" + post.id + "/likestatus", requestOptions)
+    fetch(
+      process.env.REACT_APP_MONGODB + "/post/" + post.id + "/likestatus",
+      requestOptions
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Invalid login data");
@@ -52,20 +55,24 @@ const PostPage = withRouter(({ history, match }) => {
       })
       .then((data) => {
         setLiked(data);
-      }).catch((e) => {
+      })
+      .catch((e) => {
         console.log(e);
       });
-  }
+  };
 
   const likePost = () => {
     const requestOptions = {
       method: "POST",
       headers: {
         "Content-Type": "text/plain",
-        "Authorization": cookies.downvotedLogin
-     }
+        Authorization: cookies.downvotedLogin,
+      },
     };
-    fetch(process.env.REACT_APP_MONGODB + "/post/" + post.id + "/like", requestOptions)
+    fetch(
+      process.env.REACT_APP_MONGODB + "/post/" + post.id + "/like",
+      requestOptions
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Invalid login data");
@@ -73,24 +80,28 @@ const PostPage = withRouter(({ history, match }) => {
         return response.json();
       })
       .then((data) => {
-        if(data) {
+        if (data) {
           post.likeCount++;
         }
         setLiked(true);
-      }).catch((e) => {
+      })
+      .catch((e) => {
         console.log(e);
       });
-  }
+  };
 
   const unlikePost = () => {
     const requestOptions = {
       method: "POST",
       headers: {
         "Content-Type": "text/plain",
-        "Authorization": cookies.downvotedLogin
-     }
+        Authorization: cookies.downvotedLogin,
+      },
     };
-    fetch(process.env.REACT_APP_MONGODB + "/post/" + post.id + "/unlike", requestOptions)
+    fetch(
+      process.env.REACT_APP_MONGODB + "/post/" + post.id + "/unlike",
+      requestOptions
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Invalid login data");
@@ -98,22 +109,23 @@ const PostPage = withRouter(({ history, match }) => {
         return response.json();
       })
       .then((data) => {
-        if(data) {
+        if (data) {
           post.likeCount--;
         }
         setLiked(false);
-      }).catch((e) => {
+      })
+      .catch((e) => {
         console.log(e);
       });
-  }
+  };
 
   const votePost = () => {
-    if(!liked) {
+    if (!liked) {
       likePost();
     } else {
       unlikePost();
     }
-  }
+  };
 
   return (
     <Grid container justifyContent="center" alignItems="center" spacing={4}>

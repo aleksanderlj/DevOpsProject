@@ -49,14 +49,6 @@ export default function SignIn() {
     console.log("YOU CAN NEVER LEAVE", res);
   };
 
-  const onLogoutSuccess = (res) => {
-    console.log("Logout success");
-  };
-
-  const onLogoutFailure = (res) => {
-    console.log("Logout go nono", res);
-  };
-
   const loginFormSubmit = () => {
     const requestOptions = {
       method: "POST",

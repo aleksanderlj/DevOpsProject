@@ -1,8 +1,6 @@
 import "./App.css";
-import { Redirect, Route, Switch, withRouter } from "react-router-dom";
-import JonaStore from "./stores/JonaStore";
+import { Redirect, Route, Switch } from "react-router-dom";
 import { observer } from "mobx-react-lite";
-import { Button } from "@mui/material";
 import AppBar from "./AppBar";
 import PostContainer from "./postUI/PostContainer";
 import MyProfile from "./profileUI/MyProfile";
@@ -11,7 +9,7 @@ import PostPage from "./postUI/PostPage";
 import CreatePost from "./postUI/CreatePost";
 import { useCookies, withCookies } from "react-cookie";
 
-const jonaStore = new JonaStore();
+// const jonaStore = new JonaStore();
 
 function App() {
   const [cookies, setCookie, removeCookie] = useCookies(["downvotedLogin"]);
@@ -22,8 +20,8 @@ function App() {
       <div
         className="App"
         style={{
-          marginTop: "7em",
-          paddingBottom: "4em",
+          marginTop: "100px",
+          paddingBottom: "40px",
         }}
       >
         <Switch>
@@ -33,11 +31,14 @@ function App() {
           <Route path={"/signin"}>
             {!cookies.downvotedLogin ? <SignIn /> : <Redirect to="/" />}
           </Route>
-          <Route path={"/storestuff"} component={StoreStuff} />
-          <Route path={"/param/:text"} component={Param} />
+          {/*<Route path={"/storestuff"} component={StoreStuff} />*/}
+          {/*<Route path={"/param/:text"} component={Param} />*/}
           <Route path={"/createpost"} component={CreatePost} />
           <Route path={"/post/:post"} component={PostPage} />
-          <Route exact path={"/"} component={PostContainer} />
+          <Route path={"/:text"} component={PostContainer} />
+          <Route exact path={"/"}>
+            <Redirect to={"/All Posts"} component={PostContainer} />
+          </Route>
           <Route render={() => <h1>404</h1>} />
         </Switch>
       </div>
@@ -45,7 +46,7 @@ function App() {
   );
 }
 
-const Param = withRouter(({ history, match }) => {
+/*const Param = withRouter(({ history, match }) => {
   console.log(match);
   return (
     <>
@@ -103,6 +104,6 @@ const StoreStuff = observer(() => {
       </Button>
     </>
   );
-});
+});*/
 
 export default withCookies(observer(App));

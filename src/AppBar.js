@@ -15,21 +15,20 @@ import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { useTheme } from "@emotion/react";
-import { makeStyles } from "@mui/styles";
 import { Accessible, Adjust, Login } from "@mui/icons-material";
-import { Button, Tooltip } from "@mui/material";
+import { Button, ClickAwayListener, Tooltip } from "@mui/material";
 import "./AppBar.css";
 import { useCookies } from "react-cookie";
-
-const useStyles = makeStyles({});
+import { isMobile } from "react-device-detect";
+import { observer } from "mobx-react-lite";
 
 const drawerWidth = 240;
 
+// Styling fra MUI
 const ThisAppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
@@ -47,6 +46,7 @@ const ThisAppBar = styled(MuiAppBar, {
   }),
 }));
 
+// Styling fra MUI
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
@@ -56,7 +56,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
-export default function AppBar() {
+const AppBar = observer(() => {
   const history = useHistory();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -64,7 +64,6 @@ export default function AppBar() {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [activeSub, setActiveSub] = useState("All Posts");
   const [cookies, setCookie, removeCookie] = useCookies(["downvotedLogin"]);
-
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -187,15 +186,15 @@ export default function AppBar() {
             startIcon={!open ? <MenuIcon /> : null}
             onClick={() => setOpen(!open)}
           >
-            DOWNVOTED
+            {isMobile || open ? "" : "DOWNVOTED"}
           </Button>
           <Box sx={{ margin: "auto" }}>
             <Typography
               variant="h6"
-              className={"mainSub"}
+              className={isMobile ? null : "mainSub"}
               align={"center"}
-              onClick={() => history.replace("/")}
-              style={{ marginLeft: "-10em" }}
+              onClick={() => history.push("/" + activeSub)}
+              style={{ marginLeft: isMobile ? "0px" : "-10em" }}
             >
               {activeSub.toUpperCase()}
             </Typography>
@@ -225,6 +224,7 @@ export default function AppBar() {
       <Drawer
         sx={{
           width: drawerWidth,
+          overflowX: "hidden",
           flexShrink: 0,
           "& .MuiDrawer-paper": {
             width: drawerWidth,
@@ -239,45 +239,46 @@ export default function AppBar() {
       >
         <DrawerHeader>
           <IconButton color={"inherit"} onClick={handleDrawerClose}>
-            {theme.direction === "ltr" ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
+            <ChevronLeftIcon />
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List>
-          {[
-            "All Posts",
-            "IAmTheAsshole",
-            "the_donald",
-            "jontron",
-            "PepeLovers",
-            "IdiotsInWheelchairs",
-            "CommunistUtopia",
-            "Angular",
-            "CompilerTechnology",
-          ].map((text, index) => (
-            <ListItem
-              onClick={() => {
-                setActiveSub(text);
-                setOpen(false);
-              }}
-              key={index}
-              className={activeSub === text ? "activeListItem" : "listItem"}
-              button
-            >
-              <ListItemIcon className={"listItemIcon"}>
-                {text === "IdiotsInWheelchairs" ? <Accessible /> : <Adjust />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
+        <ClickAwayListener onClickAway={() => setOpen(false)}>
+          <List sx={{ overflowX: "hidden" }}>
+            {[
+              "All Posts",
+              "IAmTheAsshole",
+              "the_donald",
+              "jontron",
+              "PepeLovers",
+              "IdiotsInWheelchairs",
+              "CommunistUtopia",
+              "Angular",
+              "CompilerTechnology",
+            ].map((text, index) => (
+              <ListItem
+                onClick={() => {
+                  history.push("/" + text);
+                  setActiveSub(text);
+                  setOpen(false);
+                }}
+                key={index}
+                className={activeSub === text ? "activeListItem" : "listItem"}
+                button
+              >
+                <ListItemIcon className={"listItemIcon"}>
+                  {text === "IdiotsInWheelchairs" ? <Accessible /> : <Adjust />}
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItem>
+            ))}
+          </List>
+        </ClickAwayListener>
       </Drawer>
       {renderMobileMenu}
       {renderMenu}
     </Box>
   );
-}
+});
+
+export default AppBar;
