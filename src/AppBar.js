@@ -26,7 +26,7 @@ import { useCookies } from "react-cookie";
 import { isMobile } from "react-device-detect";
 import { observer } from "mobx-react-lite";
 
-const drawerWidth = 240;
+const drawerWidth = 140;
 
 // Styling fra MUI
 const ThisAppBar = styled(MuiAppBar, {
