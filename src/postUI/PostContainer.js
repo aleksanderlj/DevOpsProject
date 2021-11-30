@@ -107,7 +107,7 @@ const PostContainer = observer(() => {
         </DialogContent>
       </Dialog>
       <Grid container justifyContent="center" alignItems="center" spacing={4}>
-        {restStore?.posts?.length > 0
+        {restStore?.posts?.length > 0 && !newPostToFetch
           ? restStore.posts.map((post) => (
               <Grid item xs={11} sm={11} md={5}>
                 <PostCard
