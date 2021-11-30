@@ -230,7 +230,7 @@ const AppBar = observer(() => {
             width: drawerWidth,
             boxSizing: "border-box",
             backgroundColor: theme.palette.secondary.main,
-            color: "black",
+            color: "white",
           },
         }}
         variant={"temporary"}
