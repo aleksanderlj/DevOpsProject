@@ -181,7 +181,7 @@ const AppBar = observer(() => {
         <Toolbar>
           <Button
             size={"large"}
-            sx={{ fontSize: "30px" }}
+            sx={{ fontSize: "15px" }}
             color={"inherit"}
             startIcon={!open ? <MenuIcon /> : null}
             onClick={() => setOpen(!open)}
