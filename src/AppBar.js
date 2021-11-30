@@ -180,7 +180,7 @@ const AppBar = observer(() => {
       <ThisAppBar position="fixed" open={open} color={"secondary"}>
         <Toolbar>
           <Button
-            style={{ marginLeft: isMobile ? "-20px" : "0em" }}
+            style={{ marginLeft: isMobile ? "-15px" : "0em" }}
             size={"large"}
             sx={{ fontSize: "30px" }}
             color={"inherit"}
