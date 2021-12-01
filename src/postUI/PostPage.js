@@ -161,7 +161,7 @@ const PostPage = withRouter(({ history, match }) => {
             <Button
               style={{ color: "brown" }}
               size="medium"
-              endIcon={<ThumbDown />}
+              endIcon={liked ? <ThumbDown /> : <ThumbDownOffAlt />}
               onClick={() => votePost()}
             >
               {post?.likeCount}
