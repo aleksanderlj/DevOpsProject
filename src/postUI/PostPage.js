@@ -175,7 +175,6 @@ const PostPage = withRouter(({ history, match }) => {
             <ClickAwayListener onClickAway={handleTooltipClose}>
             
               <Tooltip
-                  onClose={handleTooltipClose}
                   open={open}
                   title={!cookies.downvotedLogin ? "You need to be logged in to vote!" : ""
                 }
