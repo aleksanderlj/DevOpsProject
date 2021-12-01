@@ -162,7 +162,11 @@ const PostPage = withRouter(({ history, match }) => {
               style={{ color: "brown" }}
               size="medium"
               endIcon={liked ? <ThumbDown /> : <ThumbDownOffAlt />}
-              onClick={() => votePost()}
+              onClick={() => {
+              cookies.downvotedLogin
+                ? votePost()
+                : console.log("User not logged in");
+            }}
             >
               {post?.likeCount}
             </Button>
