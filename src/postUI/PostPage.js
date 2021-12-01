@@ -12,6 +12,7 @@ import CommentsList from "./CommentsList";
 import { Tooltip, useTheme } from "@mui/material";
 import { Grid } from "@mui/material";
 import { isMobile } from "react-device-detect";
+import ClickAwayListener from '@mui/material/ClickAwayListener';
 
 const PostPage = withRouter(({ history, match }) => {
   const theme = useTheme();
