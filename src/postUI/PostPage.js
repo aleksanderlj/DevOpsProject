@@ -166,14 +166,15 @@ const PostPage = withRouter(({ history, match }) => {
               }
               placement={"top"}
             >
-            <Button
-              style={{ color: theme.palette.secondary.main }}
-              size="medium"
-              endIcon={liked ? <ThumbDown /> : <ThumbDownOffAlt />}
-              onClick={() => votePost()}
-            >
-              {post?.likeCount}
-            </Button>
+              <Button
+                style={{ color: theme.palette.secondary.main }}
+                size="medium"
+                endIcon={liked ? <ThumbDown /> : <ThumbDownOffAlt />}
+                onClick={() => votePost()}
+              >
+                {post?.likeCount}
+              </Button>
+            </Tooltip>
           </CardActions>
         </Card>
         <CommentsList />
