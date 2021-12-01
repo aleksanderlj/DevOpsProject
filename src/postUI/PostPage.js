@@ -180,9 +180,6 @@ const PostPage = withRouter(({ history, match }) => {
                  }}
                   onClose={handleTooltipClose}
                   open={open}
-                  disableFocusListener={isMobile ? true : false}
-                  disableHoverListener={isMobile ? true : false}
-                  disableTouchListener={isMobile ? true : false}
                   title={!cookies.downvotedLogin ? "You need to be logged in to vote!" : ""
                 }
                 placement={"top"}
