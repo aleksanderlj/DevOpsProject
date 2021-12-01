@@ -10,6 +10,7 @@ import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
 import CommentsList from "./CommentsList";
 import { Tooltip, useTheme } from "@mui/material";
+import { Grid } from "@mui/material";
 
 const PostPage = withRouter(({ history, match }) => {
   const theme = useTheme();
