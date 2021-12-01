@@ -11,6 +11,7 @@ import Button from "@mui/material/Button";
 import CommentsList from "./CommentsList";
 import { Tooltip, useTheme } from "@mui/material";
 import { Grid } from "@mui/material";
+import { isMobile } from "react-device-detect";
 
 const PostPage = withRouter(({ history, match }) => {
   const theme = useTheme();
@@ -18,6 +19,16 @@ const PostPage = withRouter(({ history, match }) => {
   const [liked, setLiked] = useState(null);
   const [cookies, setCookie, removeCookie] = useCookies(["downvotedLogin"]);
   const { REACT_APP_MONGODB } = process.env;
+  
+  const [open, setOpen] = React.useState(false);
+
+  const handleTooltipClose = () => {
+    setOpen(false);
+  };
+
+  const handleTooltipOpen = () => {
+    setOpen(true);
+  };
 
   useEffect(() => {
     if (!post) {
@@ -161,11 +172,18 @@ const PostPage = withRouter(({ history, match }) => {
               {0}
             </Button>
             <Tooltip
-              title={
-                !cookies.downvotedLogin ? "You need to be logged in to vote!" : ""
+                PopperProps={{
+                  disablePortal: true,
+                }}
+                onClose={handleTooltipClose}
+                open={open}
+                disableFocusListener
+                isMobile ? disableHoverListener : enableHoverListener
+                disableTouchListener
+                title={!cookies.downvotedLogin ? "You need to be logged in to vote!" : ""
               }
               placement={"top"}
-            >
+              >
               <Button
                 style={{ color: theme.palette.secondary.main }}
                 size="medium"
