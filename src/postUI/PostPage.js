@@ -178,7 +178,7 @@ const PostPage = withRouter(({ history, match }) => {
                 onClose={handleTooltipClose}
                 open={open}
                 disableFocusListener
-                isMobile ? disableHoverListener : enableHoverListener
+                disableHoverListener
                 disableTouchListener
                 title={!cookies.downvotedLogin ? "You need to be logged in to vote!" : ""
               }
