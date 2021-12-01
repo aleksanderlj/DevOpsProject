@@ -8,10 +8,11 @@ import Typography from "@mui/material/Typography";
 import { Comment, ThumbDown, ThumbDownOffAlt } from "@mui/icons-material";
 import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
-import { Grid } from "@mui/material";
 import CommentsList from "./CommentsList";
+import { Tooltip, useTheme } from "@mui/material";
 
 const PostPage = withRouter(({ history, match }) => {
+  const theme = useTheme();
   const [post, setPost] = useState(null);
   const [liked, setLiked] = useState(null);
   const [cookies, setCookie, removeCookie] = useCookies(["downvotedLogin"]);
