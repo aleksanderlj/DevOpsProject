@@ -189,9 +189,12 @@ const PostPage = withRouter(({ history, match }) => {
                 size="medium"
                 endIcon={liked ? <ThumbDown /> : <ThumbDownOffAlt />}
                 onClick={() => {
-              cookies.downvotedLogin
-                ? votePost()
-                : console.log("User not logged in");
+                  if(cookies.downvotedLogin){
+                    votePost()
+                  }else{
+                    handleTooltipOpen
+                    console.log("User not logged in");
+                  }
             }}
               >
                 {post?.likeCount}
