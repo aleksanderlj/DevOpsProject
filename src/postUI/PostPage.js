@@ -164,7 +164,7 @@ const PostPage = withRouter(({ history, match }) => {
                 !cookies.downvotedLogin ? "You need to be logged in to vote!" : ""
               }
               placement={"top"}
-             >
+            >
             <Button
               style={{ color: theme.palette.secondary.main }}
               size="medium"
