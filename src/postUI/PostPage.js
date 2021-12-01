@@ -192,7 +192,7 @@ const PostPage = withRouter(({ history, match }) => {
                   if(cookies.downvotedLogin){
                     votePost()
                   }else{
-                    handleTooltipOpen
+                    handleTooltipOpen()
                     console.log("User not logged in");
                   }
             }}
