@@ -154,14 +154,14 @@ const PostPage = withRouter(({ history, match }) => {
           </CardContent>
           <CardActions disableSpacing style={{ float: "right" }}>
             <Button
-              style={{ color: "brown" }}
+              style={{ color: theme.palette.secondary.main }}
               size="medium"
               endIcon={<Comment />}
             >
               {0}
             </Button>
             <Button
-              style={{ color: "brown" }}
+              style={{ color: theme.palette.secondary.main }}
               size="medium"
               endIcon={liked ? <ThumbDown /> : <ThumbDownOffAlt />}
               onClick={() => votePost()}
