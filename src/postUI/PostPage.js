@@ -5,6 +5,7 @@ import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
+import { Comment, ThumbDown, ThumbDownOffAlt } from "@mui/icons-material";
 import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
 import { Comment, ThumbDown } from "@mui/icons-material";
