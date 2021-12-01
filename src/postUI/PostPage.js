@@ -170,14 +170,11 @@ const PostPage = withRouter(({ history, match }) => {
               size="medium"
               endIcon={<Comment />}
             >
-              {0}
+              {5}
             </Button>
             <ClickAwayListener onClickAway={handleTooltipClose}>
-            <div>
+            
               <Tooltip
-                 PopperProps={{
-                  disablePortal: true,
-                 }}
                   onClose={handleTooltipClose}
                   open={open}
                   title={!cookies.downvotedLogin ? "You need to be logged in to vote!" : ""
@@ -200,7 +197,6 @@ const PostPage = withRouter(({ history, match }) => {
                   {post?.likeCount}
                 </Button>
               </Tooltip>
-             </div>
            </ClickAwayListener>
           </CardActions>
         </Card>
