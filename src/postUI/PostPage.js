@@ -153,21 +153,17 @@ const PostPage = withRouter(({ history, match }) => {
           </CardContent>
           <CardActions disableSpacing style={{ float: "right" }}>
             <Button
-              color={theme.palette.primary.main}
+              style={{ color: "brown" }}
               size="medium"
               endIcon={<Comment />}
             >
               {0}
             </Button>
             <Button
-              style={{ color: theme.palette.secondary.main }}
+              style={{ color: "brown" }}
               size="medium"
               endIcon={liked ? <ThumbDown /> : <ThumbDownOffAlt />}
-              onClick={() => {
-              cookies.downvotedLogin
-                ? votePost()
-                : console.log("User not logged in");
-            }}
+              onClick={() => votePost()}
             >
               {post?.likeCount}
             </Button>
