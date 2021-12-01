@@ -171,19 +171,23 @@ const PostPage = withRouter(({ history, match }) => {
             >
               {0}
             </Button>
-            <Tooltip
-                PopperProps={{
+            <ClickAwayListener onClickAway={handleTooltipClose}>
+            <div>
+              <Tooltip
+                 PopperProps={{
                   disablePortal: true,
-                }}
-                onClose={handleTooltipClose}
-                open={open}
-                disableFocusListener
-                disableHoverListener
-                disableTouchListener
-                title={!cookies.downvotedLogin ? "You need to be logged in to vote!" : ""
-              }
-              placement={"top"}
-              >
+                 }}
+                  onClose={handleTooltipClose}
+                  open={open}
+                  disableFocusListener={isMobile ? false : true}
+                  disableHoverListener={isMobile ? false : true}
+                  disableTouchListener={isMobile ? false : true}
+                  title={!cookies.downvotedLogin ? "You need to be logged in to vote!" : ""
+                }
+                placement={"top"}
+                >
+             </div>
+            </ClickAwayListener>
               <Button
                 style={{ color: theme.palette.secondary.main }}
                 size="medium"
