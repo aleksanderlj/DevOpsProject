@@ -158,7 +158,7 @@ const PostPage = withRouter(({ history, match }) => {
               size="medium"
               endIcon={<Comment />}
             >
-              {commentCount}
+              {post?.commentCount}
             </Button>
             <Tooltip
               title={
