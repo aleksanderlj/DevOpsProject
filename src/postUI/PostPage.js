@@ -153,7 +153,7 @@ const PostPage = withRouter(({ history, match }) => {
           </CardContent>
           <CardActions disableSpacing style={{ float: "right" }}>
             <Button
-              style={{ color: theme.palette.secondary.main }}}
+              color={theme.palette.primary.main}
               size="medium"
               endIcon={<Comment />}
             >
