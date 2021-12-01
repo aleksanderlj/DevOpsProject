@@ -186,24 +186,24 @@ const PostPage = withRouter(({ history, match }) => {
                 }
                 placement={"top"}
                 >
+                <Button
+                  style={{ color: theme.palette.secondary.main }}
+                  size="medium"
+                  endIcon={liked ? <ThumbDown /> : <ThumbDownOffAlt />}
+                  onClick={() => {
+                    if(cookies.downvotedLogin){
+                     votePost()
+                   }else{
+                     handleTooltipOpen()
+                     console.log("User not logged in");
+                   }
+             }}
+                >
+                  {post?.likeCount}
+                </Button>
+              </Tooltip>
              </div>
-            </ClickAwayListener>
-              <Button
-                style={{ color: theme.palette.secondary.main }}
-                size="medium"
-                endIcon={liked ? <ThumbDown /> : <ThumbDownOffAlt />}
-                onClick={() => {
-                  if(cookies.downvotedLogin){
-                    votePost()
-                  }else{
-                    handleTooltipOpen()
-                    console.log("User not logged in");
-                  }
-            }}
-              >
-                {post?.likeCount}
-              </Button>
-            </Tooltip>
+           </ClickAwayListener>
           </CardActions>
         </Card>
         <CommentsList />
