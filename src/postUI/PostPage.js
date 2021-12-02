@@ -179,7 +179,7 @@ const PostPage = withRouter(({ history, match }) => {
                   title={!cookies.downvotedLogin ? "You need to be logged in to vote!" : ""}
                   open={showTooltip}
                   onOpen={() => setShowTooltip(true)}
-                  onClose={() => setShowTooltip(true)}
+                  onClose={() => setShowTooltip(false)}
                   placement={"top"}
                 >
                 <Button
