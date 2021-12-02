@@ -9,6 +9,8 @@ import Typography from "@mui/material/Typography";
 import { Comment, ThumbDown, ThumbDownOffAlt } from "@mui/icons-material";
 import { useHistory } from "react-router-dom";
 import { Tooltip, useTheme } from "@mui/material";
+import { isMobile } from "react-device-detect";
+import ClickAwayListener from '@mui/material/ClickAwayListener';
 import "./PostCard.css";
 
 const PostCard = ({
@@ -33,6 +35,17 @@ const PostCard = ({
   const [likeCount, setLikeCount] = useState(shitCount);
   const [cookies, setCookie, removeCookie] = useCookies(["downvotedLogin"]);
   const REACT_APP_MONGODB = process.env;
+  const [showTooltip, setShowTooltip] = useState(false);
+  
+  const [open, setOpen] = React.useState(false);
+
+  const handleTooltipClose = () => {
+    setOpen(false);
+  };
+
+  const handleTooltipOpen = () => {
+    setOpen(true);
+  };
 
   const dateObject = new Date(date);
 
