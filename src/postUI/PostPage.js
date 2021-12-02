@@ -20,6 +20,7 @@ const PostPage = withRouter(({ history, match }) => {
   const [liked, setLiked] = useState(null);
   const [cookies, setCookie, removeCookie] = useCookies(["downvotedLogin"]);
   const { REACT_APP_MONGODB } = process.env;
+  const [showTooltip, setShowTooltip] = useState(false);
   
   const [open, setOpen] = React.useState(false);
 
