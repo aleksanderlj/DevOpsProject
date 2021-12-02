@@ -7,9 +7,14 @@ import {
   OutlinedInput,
 } from "@mui/material";
 import { useCookies } from "react-cookie";
-import jwt from "jwt-decode";
+import RESTStore from "../stores/RESTStore";
+import { observer } from "mobx-react-lite";
+import { useHistory } from "react-router-dom";
 
-const CreatePost = ({ newPostSubmitted }) => {
+const restStore = new RESTStore();
+
+const CreatePost = observer(({ newPostSubmitted }) => {
+  const history = useHistory();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [imageUrl, setImageUrl] = useState("");
@@ -20,34 +25,19 @@ const CreatePost = ({ newPostSubmitted }) => {
       window.alert("You are not logged in!");
       return;
     }
-    const token = jwt(cookies.downvotedLogin);
-    const time = new Date();
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        title: title,
-        content: content,
-        userId: token.id,
-        postDate: time.getTime(),
-        imageUrl: imageUrl,
-      }),
-    };
-    fetch(process.env.REACT_APP_MONGODB + "/post", requestOptions)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Something went wrong");
-        }
-        return response.text();
-      })
-      .then((data) => {
-        console.log(data);
+    restStore
+      .createPostSubmit(
+        cookies.downvotedLogin,
+        title,
+        content,
+        imageUrl,
+        history.location.pathname.substring(1)
+      )
+      .then(() => {
+        setTitle("");
+        setContent("");
+        setImageUrl("");
         newPostSubmitted();
-      })
-      .catch((e) => {
-        window.alert(e);
       });
   };
 
@@ -110,6 +100,6 @@ const CreatePost = ({ newPostSubmitted }) => {
       </Button>
     </Grid>
   );
-};
+});
 
 export default CreatePost;

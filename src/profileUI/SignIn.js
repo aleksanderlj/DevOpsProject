@@ -4,6 +4,7 @@ import {
   Button,
   CardActions,
   CardContent,
+  CircularProgress,
   FormControl,
   Grid,
   InputLabel,
@@ -23,6 +24,8 @@ const { REACT_APP_MONGODB } = process.env;
 export default function SignIn() {
   const theme = useTheme();
   const history = useHistory();
+  const [loadingLogin, setLoadingLogin] = useState(false);
+  const [loadingSignUp, setLoadingSignUp] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [newUsername, setNewUsername] = useState("");
@@ -30,6 +33,7 @@ export default function SignIn() {
   const [cookies, setCookie, removeCookie] = useCookies(["downvotedLogin"]);
 
   const onGoogleLoginSuccess = (res) => {
+    setLoadingLogin(true);
     console.log("Login success for: ", res.profileObj);
     console.log("Send to backend: ", res.getAuthResponse().id_token);
     const requestOptions = {
@@ -42,22 +46,21 @@ export default function SignIn() {
       .then((response) => response.text())
       .then((data) => {
         setCookie("downvotedLogin", data, { path: "/" });
+        setLoadingLogin(false);
+      })
+      .catch((e) => {
+        setLoadingLogin(false);
+        window.alert(e);
       });
   };
 
   const onGoogleLoginFailure = (res) => {
+    setLoadingLogin(false);
     console.log("YOU CAN NEVER LEAVE", res);
   };
 
-  const onLogoutSuccess = (res) => {
-    console.log("Logout success");
-  };
-
-  const onLogoutFailure = (res) => {
-    console.log("Logout go nono", res);
-  };
-
   const loginFormSubmit = () => {
+    setLoadingLogin(true);
     const requestOptions = {
       method: "POST",
       headers: {
@@ -75,13 +78,16 @@ export default function SignIn() {
       .then((data) => {
         console.log(data);
         setCookie("downvotedLogin", data, { path: "/" });
+        setLoadingLogin(false);
       })
       .catch((e) => {
         window.alert(e);
+        setLoadingLogin(false);
       });
   };
 
   const signupFormSubmit = () => {
+    setLoadingSignUp(true);
     const requestOptions = {
       method: "POST",
       headers: {
@@ -99,9 +105,11 @@ export default function SignIn() {
       .then((data) => {
         console.log(data);
         setCookie("downvotedLogin", data, { path: "/" });
+        setLoadingSignUp(false);
       })
       .catch((e) => {
         window.alert(e);
+        setLoadingSignUp(false);
       });
   };
 
@@ -158,9 +166,14 @@ export default function SignIn() {
               type={"submit"}
               variant={"contained"}
               size="large"
-              disabled={username.length === 0 || password.length === 0}
+              disabled={
+                username.length === 0 ||
+                password.length === 0 ||
+                loadingLogin ||
+                loadingSignUp
+              }
             >
-              LOGIN
+              {loadingLogin ? <CircularProgress size={32} /> : "LOGIN"}
             </Button>
             <GoogleLogin
               clientId={clientId}
@@ -229,9 +242,14 @@ export default function SignIn() {
               type={"submit"}
               variant={"contained"}
               size="large"
-              disabled={newUsername.length === 0 || newPassword.length === 0}
+              disabled={
+                newUsername.length === 0 ||
+                newPassword.length === 0 ||
+                loadingLogin ||
+                loadingSignUp
+              }
             >
-              *SIGN UP
+              {loadingSignUp ? <CircularProgress size={32} /> : "*SIGN UP"}
             </Button>
           </CardActions>
         </Card>

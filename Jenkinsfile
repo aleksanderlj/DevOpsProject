@@ -21,7 +21,7 @@ docker-compose build'''
         sh '''
 #!/bin/bash
 docker push amtoft/devops_react_app
-sudo caprover deploy -i amtoft/devops_react_app -a react -n captain-01 -p jonatandahl'''
+caprover deploy -i amtoft/devops_react_app -a react -n captain-01 -p jonatandahl'''
       }
     }
 

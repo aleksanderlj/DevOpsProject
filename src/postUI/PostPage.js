@@ -5,23 +5,38 @@ import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
+import { Comment, ThumbDown, ThumbDownOffAlt } from "@mui/icons-material";
 import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
-import { Comment, Opacity, ThumbDown } from "@mui/icons-material";
-import { Grid } from "@mui/material";
 import CommentsList from "./CommentsList";
+import { Tooltip, useTheme } from "@mui/material";
+import { Grid } from "@mui/material";
+import { isMobile } from "react-device-detect";
+import ClickAwayListener from '@mui/material/ClickAwayListener';
 
 const PostPage = withRouter(({ history, match }) => {
+  const theme = useTheme();
   const [post, setPost] = useState(null);
   const [liked, setLiked] = useState(null);
   const [cookies, setCookie, removeCookie] = useCookies(["downvotedLogin"]);
   const { REACT_APP_MONGODB } = process.env;
+  const [showTooltip, setShowTooltip] = useState(false);
+  
+  const [open, setOpen] = React.useState(false);
+
+  const handleTooltipClose = () => {
+    setOpen(false);
+  };
+
+  const handleTooltipOpen = () => {
+    setOpen(true);
+  };
 
   useEffect(() => {
-    if(!post){
+    if (!post) {
       fetchPost();
     }
-    if(post && !liked && cookies.downvotedLogin){
+    if (post && !liked && cookies.downvotedLogin) {
       fetchLikeStatus();
     }
   });
@@ -40,10 +55,13 @@ const PostPage = withRouter(({ history, match }) => {
       method: "GET",
       headers: {
         "Content-Type": "text/plain",
-        "Authorization": cookies.downvotedLogin
-     }
+        Authorization: cookies.downvotedLogin,
+      },
     };
-    fetch(process.env.REACT_APP_MONGODB + "/post/" + post.id + "/likestatus", requestOptions)
+    fetch(
+      process.env.REACT_APP_MONGODB + "/post/" + post.id + "/likestatus",
+      requestOptions
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Invalid login data");
@@ -52,20 +70,24 @@ const PostPage = withRouter(({ history, match }) => {
       })
       .then((data) => {
         setLiked(data);
-      }).catch((e) => {
+      })
+      .catch((e) => {
         console.log(e);
       });
-  }
+  };
 
   const likePost = () => {
     const requestOptions = {
       method: "POST",
       headers: {
         "Content-Type": "text/plain",
-        "Authorization": cookies.downvotedLogin
-     }
+        Authorization: cookies.downvotedLogin,
+      },
     };
-    fetch(process.env.REACT_APP_MONGODB + "/post/" + post.id + "/like", requestOptions)
+    fetch(
+      process.env.REACT_APP_MONGODB + "/post/" + post.id + "/like",
+      requestOptions
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Invalid login data");
@@ -73,24 +95,28 @@ const PostPage = withRouter(({ history, match }) => {
         return response.json();
       })
       .then((data) => {
-        if(data) {
+        if (data) {
           post.likeCount++;
         }
         setLiked(true);
-      }).catch((e) => {
+      })
+      .catch((e) => {
         console.log(e);
       });
-  }
+  };
 
   const unlikePost = () => {
     const requestOptions = {
       method: "POST",
       headers: {
         "Content-Type": "text/plain",
-        "Authorization": cookies.downvotedLogin
-     }
+        Authorization: cookies.downvotedLogin,
+      },
     };
-    fetch(process.env.REACT_APP_MONGODB + "/post/" + post.id + "/unlike", requestOptions)
+    fetch(
+      process.env.REACT_APP_MONGODB + "/post/" + post.id + "/unlike",
+      requestOptions
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Invalid login data");
@@ -98,22 +124,23 @@ const PostPage = withRouter(({ history, match }) => {
         return response.json();
       })
       .then((data) => {
-        if(data) {
+        if (data) {
           post.likeCount--;
         }
         setLiked(false);
-      }).catch((e) => {
+      })
+      .catch((e) => {
         console.log(e);
       });
-  }
+  };
 
   const votePost = () => {
-    if(!liked) {
+    if (!liked) {
       likePost();
     } else {
       unlikePost();
     }
-  }
+  };
 
   return (
     <Grid container justifyContent="center" alignItems="center" spacing={4}>
@@ -140,20 +167,38 @@ const PostPage = withRouter(({ history, match }) => {
           </CardContent>
           <CardActions disableSpacing style={{ float: "right" }}>
             <Button
-              style={{ color: "brown" }}
+              style={{ color: theme.palette.secondary.main }}
               size="medium"
               endIcon={<Comment />}
             >
-              {0}
+              {5}
             </Button>
-            <Button
-              style={{ color: "brown" }}
-              size="medium"
-              endIcon={<ThumbDown />}
-              onClick={() => votePost()}
-            >
-              {post?.likeCount}
-            </Button>
+            <ClickAwayListener onClickAway={handleTooltipClose}>
+            
+              <Tooltip
+                  title={!cookies.downvotedLogin ? "You need to be logged in to vote!" : ""}
+                  open={showTooltip}
+                  onOpen={() => setShowTooltip(true)}
+                  onClose={() => setShowTooltip(false)}
+                  placement={"top"}
+                >
+                <Button
+                  style={{ color: theme.palette.secondary.main }}
+                  size="medium"
+                  endIcon={liked ? <ThumbDown /> : <ThumbDownOffAlt />}
+                  onClick={() => {
+                    if(cookies.downvotedLogin){
+                     votePost()
+                   }else{
+                     setShowTooltip(!showTooltip)
+                     console.log("User not logged in");
+                   }
+             }}
+                >
+                  {post?.likeCount}
+                </Button>
+              </Tooltip>
+           </ClickAwayListener>
           </CardActions>
         </Card>
         <CommentsList />
