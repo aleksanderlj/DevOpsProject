@@ -176,6 +176,10 @@ const PostPage = withRouter(({ history, match }) => {
             
               <Tooltip
                   title={!cookies.downvotedLogin ? "You need to be logged in to vote!" : ""
+                  open={showTooltip}
+                  onOpen={() => setShowTooltip(true)}
+                  onClose={() => setShowTooltip(true)}
+                  
                 }
                 placement={"top"}
                 >
@@ -187,6 +191,7 @@ const PostPage = withRouter(({ history, match }) => {
                     if(cookies.downvotedLogin){
                      votePost()
                    }else{
+                     setShowTooltip(!showTooltip)
                      handleTooltipOpen()
                      console.log("User not logged in");
                    }
