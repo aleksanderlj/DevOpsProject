@@ -179,9 +179,7 @@ const PostPage = withRouter(({ history, match }) => {
                   open={showTooltip}
                   onOpen={() => setShowTooltip(true)}
                   onClose={() => setShowTooltip(true)}
-                  
-                }
-                placement={"top"}
+                  placement={"top"}
                 >
                 <Button
                   style={{ color: theme.palette.secondary.main }}
