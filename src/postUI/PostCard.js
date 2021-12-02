@@ -181,25 +181,32 @@ const PostCard = ({
         >
           {commentCount}
         </Button>
-        <Tooltip
-          title={
-            !cookies.downvotedLogin ? "You need to be logged in to vote!" : ""
-          }
-          placement={"top"}
-        >
-          <Button
-            style={{ color: theme.palette.secondary.main }}
-            size="medium"
-            endIcon={liked ? <ThumbDown /> : <ThumbDownOffAlt />}
-            onClick={() => {
-              cookies.downvotedLogin
-                ? votePost()
-                : console.log("User not logged in");
-            }}
-          >
-            {likeCount}
-          </Button>
-        </Tooltip>
+        <ClickAwayListener onClickAway={handleTooltipClose}>
+            
+              <Tooltip
+                  title={!cookies.downvotedLogin ? "You need to be logged in to vote!" : ""}
+                  open={showTooltip}
+                  onOpen={() => setShowTooltip(true)}
+                  onClose={() => setShowTooltip(false)}
+                  placement={"top"}
+                >
+                <Button
+                  style={{ color: theme.palette.secondary.main }}
+                  size="medium"
+                  endIcon={liked ? <ThumbDown /> : <ThumbDownOffAlt />}
+                  onClick={() => {
+                    if(cookies.downvotedLogin){
+                     votePost()
+                   }else{
+                     setShowTooltip(!showTooltip)
+                     console.log("User not logged in");
+                   }
+             }}
+                >
+                  {likeCount}
+                </Button>
+              </Tooltip>
+           </ClickAwayListener>
       </CardActions>
     </Card>
   );
