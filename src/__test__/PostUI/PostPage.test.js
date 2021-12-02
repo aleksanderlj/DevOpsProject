@@ -4,7 +4,7 @@ import PostPage from '../../postUI/PostPage'
 import { Router } from 'react-router-dom'
 import { createMemoryHistory } from 'history'
 
-test('Tests commentList renders correctly', () => {
+test('Tests PostPage renders correctly', () => {
     const history = createMemoryHistory();
 
     const component = renderer.create(

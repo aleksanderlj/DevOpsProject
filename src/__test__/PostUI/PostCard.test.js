@@ -2,7 +2,7 @@ import React from 'react'
 import renderer from 'react-test-renderer';
 import PostCard from '../../postUI/PostCard'
 
-test('Tests commentList renders correctly', () => {
+test('Tests PostCard renders correctly', () => {
     const component = renderer.create(
         <PostCard postId={2}
         title="title"
