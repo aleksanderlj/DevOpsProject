@@ -191,7 +191,6 @@ const PostPage = withRouter(({ history, match }) => {
                      votePost()
                    }else{
                      setShowTooltip(!showTooltip)
-                     handleTooltipOpen()
                      console.log("User not logged in");
                    }
              }}
