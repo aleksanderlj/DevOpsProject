@@ -13,8 +13,8 @@ docker-compose build'''
       steps {
         echo 'Test here'
         sh '''#!/bin/bash
-npm install --force
-yarn test'''
+yarn install
+yarn test -u --silent'''
       }
     }
 
