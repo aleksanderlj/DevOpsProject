@@ -25,8 +25,8 @@ rm -R node_modules'''
         echo 'Deploy here'
         sh '''
 #!/bin/bash
-docker push amtoft/devops_react_app
-caprover deploy -i amtoft/devops_react_app -a react -n captain-01 -p jonatandahl'''
+docker push amtoft/devops_react_app:latest
+caprover deploy -i amtoft/devops_react_app:latest -a react -n captain-01 -p jonatandahl'''
       }
     }
 
