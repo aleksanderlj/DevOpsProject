@@ -12,6 +12,9 @@ docker-compose build'''
     stage('Test') {
       steps {
         echo 'Test here'
+        sh '''#!/bin/bash
+npm install
+yarn test'''
       }
     }
 
