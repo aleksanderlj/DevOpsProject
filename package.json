@@ -12,6 +12,8 @@
     "@sentry/tracing": "^6.15.0",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/user-event": "^12.8.3",
+    "babel-jest": "27.4.2",
+    "babel-polyfill": "^6.26.0",
     "core-js-compat": "^3.17.3",
     "jwt-decode": "^3.1.2",
     "mobx": "^6.3.3",
