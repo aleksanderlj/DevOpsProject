@@ -14,7 +14,9 @@ docker-compose build'''
         echo 'Test here'
         sh '''#!/bin/bash
 yarn install
-yarn test -u --silent'''
+yarn test -u --silent
+rm yarn.lock
+rm -R node_modules'''
       }
     }
 
