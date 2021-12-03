@@ -6,7 +6,7 @@ COPY "package.json" "package.json"
 
 ENV PATH /node_modules/.bin:$PATH
 
-RUN npm install 
+RUN yarn install --network-timeout 1000000000
 
 EXPOSE 3000
 
