@@ -187,7 +187,7 @@ const AppBar = observer(() => {
             startIcon={!open ? <MenuIcon /> : null}
             onClick={() => setOpen(!open)}
           >
-            {isMobile || open ? "" : "DOWNVOTED"}
+            {isMobile || open ? "" : "Jonatan"}
           </Button>
           <Box sx={{ margin: "auto" }}>
             <Typography
