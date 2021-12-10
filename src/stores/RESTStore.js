@@ -55,6 +55,7 @@ class RESTStore {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": cookieToken
         },
         body: JSON.stringify({
           title: title,
