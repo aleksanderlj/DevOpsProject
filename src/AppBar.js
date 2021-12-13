@@ -187,7 +187,7 @@ const AppBar = observer(() => {
             startIcon={!open ? <MenuIcon /> : null}
             onClick={() => setOpen(!open)}
           >
-            {isMobile || open ? "" : "Jonatan"}
+            {isMobile || open ? "" : "DOWNVOTED"}
           </Button>
           <Box sx={{ margin: "auto" }}>
             <Typography
@@ -252,7 +252,6 @@ const AppBar = observer(() => {
               "the_donald",
               "jontron",
               "PepeLovers",
-              "IdiotsInWheelchairs",
               "CommunistUtopia",
               "Angular",
               "CompilerTechnology",
@@ -268,7 +267,7 @@ const AppBar = observer(() => {
                 button
               >
                 <ListItemIcon className={"listItemIcon"}>
-                  {text === "IdiotsInWheelchairs" ? <Accessible /> : <Adjust />}
+                  <Adjust />
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItem>
